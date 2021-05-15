@@ -1,6 +1,31 @@
 # CONNECT IT
 ### MPIT 2021 FINAL
 ---------------------
+## Docker
+
+По умолчанию Docker открывает порт `8000`. Изменить при необходимости
+Dockerfile.
+
+```sh
+docker-compose -f docker-compose-dev.yml up --build
+```
+
+Проверьте развертывание, перейдя по этому адресу сервера в
+браузере.
+
+```sh
+0.0.0.0/login
+```
+
+## Запуск фронта отдельно
+
+Установить зависимости и devDependencies и запустите сервер.
+
+```sh
+cd frontend
+npm i
+npm start
+```
 
 ## Контроллеры
 Находятся в файле [backend/server/api/urls.py](backend/server/api/views.py)
@@ -51,31 +76,29 @@
 
 | Название           | Описание                                    |
 | ---------------- | ----------------------------------------- |
-|       |        |
+|   `UserProfile`    |        |
+|   `Organization`    |        |
+|   `Vacancies`    |        |
+|   `JobDescription_1`    |        |
+|   `JobDescription_2`    |        |
+|   `JobDescription_3`    |        |
+|   `VacancyRequirements`    |        |
+|   `Courses`    |        |
+|   `CourseSkills`    |        |
+|   `CourseMedia`    |        |
+|   `CourseProgress`    |        |
+|   `CourseMediaProgress`    |        |
+|   `Projects`    |        |
+|   `Teams`    |        |
+|   `Teammates`    |        |
+|   `CourseMediaProgress`    |        |
+|   `Tests`    |        |
+|   `TestQuestion`    |        |
+|   `TestAnswer`    |        |
+|   `TestResult`    |        |
+|   `UserSkills`    |        |
+|   `Tests`    |        |
 
 
-## Запуск фронта отдельно
 
-Установить зависимости и devDependencies и запустите сервер.
 
-```sh
-cd frontend
-npm i
-npm start
-```
-
-## Docker
-
-По умолчанию Docker открывает порт `8000`. Изменить при необходимости
-Dockerfile.
-
-```sh
-docker-compose -f docker-compose-dev.yml up --build
-```
-
-Проверьте развертывание, перейдя по этому адресу сервера в
-браузере.
-
-```sh
-0.0.0.0/login
-```

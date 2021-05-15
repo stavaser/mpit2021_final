@@ -122,9 +122,17 @@ const About = (props) => {
                               header={item.skill}
                               key={'' + index}
                             >
-                              <Tooltip title="Найти курсы">
-                                {item.description}
-                              </Tooltip>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                }}
+                              >
+                                <div>{item.description}</div>
+                                <div>
+                                  <a>Найти курсы</a>
+                                </div>
+                              </div>
                             </Panel>
                           );
                         })}

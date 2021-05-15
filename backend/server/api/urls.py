@@ -20,7 +20,9 @@ urlpatterns = [
     path("request/get_vacancy_id", views.get_vacancy_id, name="get_vacancy_id"),
     path("request/get_course_media", views.get_course_media, name="get_course_media"),
     path("request/get_courses", views.get_courses, name="get_courses"),
+    path("request/get_courses_by_skill", views.get_courses_by_skill, name="get_courses_by_skill"),
     path("request/get_org_courses", views.get_org_courses, name="get_org_courses"),
     path("request/post_course", views.post_course, name="post_course"),
     path("request/post_finished", views.post_finished, name="post_finished"),
+    path("request/get_course_skills", views.get_course_skills, name="get_course_skills"),
 ]

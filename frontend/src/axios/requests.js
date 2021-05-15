@@ -54,6 +54,12 @@ export default {
     get_courses(request) {
       return apiClient.post(`request/get_courses`, request);
     },
+    get_courses_by_skill(request) {
+      return apiClient.post(`request/get_courses_by_skill`, request);
+    },
+    get_course_skills(request) {
+      return apiClient.post(`request/get_course_skills`, request);
+    },
     post_finished(request) {
       return apiClient.post(`request/post_finished`, request);
     },

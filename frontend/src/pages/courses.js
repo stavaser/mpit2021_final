@@ -4,7 +4,9 @@ import Navbar from '../components/navbar';
 import Sidebar from '../components/sidebar';
 import CourseCards from '../components/courseCards';
 import requests from '../axios/requests';
-import { Row } from 'antd';
+import { Row, Select, Form, Button } from 'antd';
+
+const { Option } = Select;
 const Content = styled.div`
   width: 100%;
   padding: 0 5%;
@@ -15,14 +17,22 @@ const MainTitle = styled.h1``;
 const Courses = () => {
   const [data, setData] = useState([]);
   const [tags, setTags] = useState([]);
+  const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  const getAllCourses = () => {
     requests.materials
       .get_courses({ s: 's' })
       .then(({ data }) => {
         console.log(data);
         setData(data.result);
       })
+      .catch((e) => console.log(e));
+  };
+  useEffect(() => {
+    getAllCourses();
+    requests.materials
+      .get_course_skills({})
+      .then(({ data }) => setSkills(data.result))
       .catch((e) => console.log(e));
   }, []);
   console.log(data);
@@ -31,6 +41,19 @@ const Courses = () => {
       return tags.filter((x) => x.id === id).map((x) => x.name);
     }
   };
+
+  const onFinish = (values) => {
+    console.log(values);
+
+    requests.materials
+      .get_courses_by_skill(values)
+      .then(({ data }) => {
+        console.log(data);
+        setData(data.result);
+      })
+      .catch((e) => console.log(e));
+  };
+  console.log(skills);
   return (
     <>
       <Navbar />
@@ -38,6 +61,27 @@ const Courses = () => {
         <Sidebar />
         <Content>
           <MainTitle>Все курсы</MainTitle>
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item name="skills">
+              <Select
+                mode="tags"
+                style={{ width: '100%' }}
+                placeholder="Найти курсы по скиллам"
+              >
+                {skills.map((item) => {
+                  return <Option value={item}>{item}</Option>;
+                })}
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+              <Button onClick={() => getAllCourses()}>Сбросить</Button>
+            </Form.Item>
+          </Form>
+
           <Row
             gutter={[
               { xs: 12, sm: 16, md: 24, lg: 36 },

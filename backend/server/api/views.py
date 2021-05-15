@@ -234,6 +234,12 @@ def post_course(request):
                 course.title = user_data['title']
                 course.description = user_data['description']
                 course.save()
+                for skill_title in user_data['skills']:
+                    skill = CourseSkills()
+                    skill.course = course
+                    skill.skill = skill_title
+                    skill.save()
+
                 if 'media_list'in user_data and user_data['media_list']:
                     for media in user_data['media_list']:
                         course_media = CourseMedia()
@@ -293,13 +299,60 @@ def get_courses(request):
             final_json['description'] = course.description
             media_count = CourseMedia.objects.filter(course=course).count()
             final_json['media_count'] = media_count
-            final_json['finished'] = CourseProgress.objects.filter(user=user).exists()
+            final_json['finished'] = CourseProgress.objects.filter(course=course, user=user).exists()
             json_result.append(final_json)
 
         result['result'] = json_result
         return Response(result, content_type="application/json")
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_courses_by_skill(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        for skill_title in user_data['skills']:
+            skills = CourseSkills.objects.filter(skill=skill_title)
+            skills_result = []
+            for skill in skills:
+                skills_json = {}
+                courses = Courses.objects.filter(is_active=True, pk=skill.course.pk).order_by('-pk')
+                json_result = []
+                for course in courses:
+                    final_json = {}
+                    final_json['id'] = course.pk
+                    final_json['organization'] = course.organization.title
+                    final_json['title'] = course.title
+                    final_json['description'] = course.description
+                    media_count = CourseMedia.objects.filter(course=course).count()
+                    final_json['media_count'] = media_count
+                    final_json['finished'] = CourseProgress.objects.filter(course=course, user=user).exists()
+                    json_result.append(final_json)
+        result['result'] = json_result
+        return Response(result, content_type="application/json")
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_course_skills(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        skills = CourseSkills.objects.order_by().values('skill').distinct()
+        skills_result = []
+        for skill in skills:
+            skills_result.append(skill['skill'])
+        result['result'] = skills_result
+        return Response(result)
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -345,6 +398,7 @@ def get_course_media(request):
         result = final_json
         return Response(result, content_type="application/json")
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 
 # контроллеры тестов

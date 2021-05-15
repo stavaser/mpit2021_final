@@ -95,14 +95,14 @@ const Main = () => {
   };
   useEffect(() => {
     requests.organization
-      .get_org_vacancies({ s: 's' })
+      .get_org_vacancies({})
       .then(({ data }) => {
         console.log(data);
         setData(data.result);
       })
       .catch((e) => console.log(e));
     requests.organization
-      .get_org_courses({ s: 's' })
+      .get_org_courses({})
       .then(({ data }) => {
         console.log(data);
         setCourses(data.result);
@@ -188,7 +188,7 @@ const Main = () => {
             </Form.Item>
 
             <Form.List name="reqs_list">
-              {(fields, { add, remove }) => (
+              {(fields, { add, remove }, { errors }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Form.Item label={'Требование ' + (key + 1)}>
@@ -294,9 +294,37 @@ const Main = () => {
             >
               <TextArea />
             </Form.Item>
-
-            <Form.List name="media_list">
-              {(fields, { add, remove }) => (
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Ключевые навыки"
+              name="skills"
+            >
+              <Select
+                mode="tags"
+                style={{ width: '100%' }}
+                placeholder="Скилл"
+              ></Select>
+            </Form.Item>
+            <Form.List
+              name="media_list"
+              rules={[
+                {
+                  validator: async (_, media_list) => {
+                    if (!media_list || media_list.length == 0) {
+                      return Promise.reject(
+                        new Error('Добавьте хотя-бы один материал')
+                      );
+                    }
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }, { errors }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Form.Item label={'Видео ' + (key + 1)}>
@@ -361,6 +389,7 @@ const Main = () => {
                       Добавить материал
                     </Button>
                   </Form.Item>
+                  <Form.ErrorList errors={errors} />
                 </>
               )}
             </Form.List>

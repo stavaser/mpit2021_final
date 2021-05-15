@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Navbar from '../components/navbar';
 import Sidebar from '../components/sidebar';
-import Cards from '../components/cards';
+import CourseCards from '../components/courseCards';
 import requests from '../axios/requests';
 import { Row } from 'antd';
 const Content = styled.div`
@@ -12,7 +12,7 @@ const Content = styled.div`
 `;
 const MainTitle = styled.h1``;
 
-const Main = () => {
+const Courses = () => {
   const [data, setData] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ const Main = () => {
       <div style={{ display: 'flex' }}>
         <Sidebar />
         <Content>
-          <MainTitle>Все вакансии</MainTitle>
+          <MainTitle>Все курсы</MainTitle>
           <Row
             gutter={[
               { xs: 12, sm: 16, md: 24, lg: 36 },
@@ -47,7 +47,7 @@ const Main = () => {
             {data &&
               data.map((item) => {
                 return (
-                  <Cards
+                  <CourseCards
                     id={item.id}
                     title={item.title}
                     desc={item.description}
@@ -63,4 +63,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Courses;

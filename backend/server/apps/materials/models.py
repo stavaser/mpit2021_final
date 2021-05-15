@@ -8,6 +8,8 @@ class Vacancies(models.Model):
     organization = models.ForeignKey(
         to=Organization, on_delete=models.CASCADE, db_column="organization_id", verbose_name="Организация", )
     title = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
+    # salary = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
+    # schedule = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
     description = models.TextField(
         null=True, blank=True, db_column="description", verbose_name="Описание", )
     is_active = models.BooleanField(default=True)

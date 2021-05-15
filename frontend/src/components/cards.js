@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Col, Button, Divider } from 'antd';
+import { Col, Button, Divider, Tooltip } from 'antd';
 
 import {
   CalendarOutlined,
@@ -69,7 +69,7 @@ const TextBox = styled.div`
   transition: 300ms linear;
   margin: 10px;
   margin-top: 0;
-  transform: translateY(200px);
+  background-color: red;
 `;
 
 const Card = styled.div`
@@ -77,8 +77,15 @@ const Card = styled.div`
   box-shadow: 0px 10px 57px rgba(0, 0, 0, 0.1);
   border-radius: 27px;
   color: #b4b9ca;
-  height: 400px;
+  height: 300px;
+  width: 350px;
   overflow: hidden;
+  padding: 20px;
+  text-align: center;
+  h2,
+  p {
+    margin: 0;
+  }
 `;
 
 const Cards = (params) => {
@@ -88,35 +95,30 @@ const Cards = (params) => {
     <React.Fragment>
       <Col xs={24} sm={24} md={12} lg={8} xxl={6} xxxl={6}>
         <Card>
-          <Image src="" />
+          <h3>{org}</h3>
 
-          <TextBox>
-            <MainInfo>
-              <Title href="course-preview">
-                <Link
-                  to={{
-                    pathname: `/student/catalog/course-preview/${id}/${title}`,
-                  }}
-                >
-                  {title}
-                </Link>
-              </Title>
-              <Subtitle>{org}</Subtitle>
-            </MainInfo>
+          <p>Якутск, Россия</p>
+          <Divider style={{ margin: 0, marginTop: '10px' }} />
+          <Link to={{ pathname: 'about/' + id }}>
+            <h2>{title}</h2>
+          </Link>
+          <p>от 150 000 р.</p>
+          <p>Пн-Пт. 8:00-16:00</p>
 
-            <Stats>
-              {reqs &&
-                reqs.map((item) => {
-                  return (
-                    <Button style={{ marginRight: '10px' }} type="dashed">
-                      {item.skill}
-                    </Button>
-                  );
-                })}
-              <Divider />
-              {desc}
-            </Stats>
-          </TextBox>
+          {reqs &&
+            reqs.map((item) => {
+              return (
+                <Tooltip title="Найти курсы">
+                  <Button size="small" style={{ marginRight: '10px' }}>
+                    {item.skill}
+                  </Button>
+                </Tooltip>
+              );
+            })}
+          <Divider />
+          <Button type="primary" block>
+            Подать заявку
+          </Button>
         </Card>
       </Col>
     </React.Fragment>

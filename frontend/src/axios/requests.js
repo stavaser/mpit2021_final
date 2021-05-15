@@ -39,5 +39,8 @@ export default {
     get_vacancies(request) {
       return apiClient.post(`request/get_vacancies`, request);
     },
+    get_vacancy_id(request) {
+      return apiClient.post(`request/get_vacancy_id`, request);
+    },
   },
 };

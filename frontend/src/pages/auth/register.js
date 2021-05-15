@@ -208,9 +208,13 @@ const Register = (props) => {
                   ]}
                   tooltip="Это поле обязательно"
                 >
-                  <Radio.Group onChange={() => setIsOrg(!isOrg)}>
-                    <Radio.Button value={true}>Да</Radio.Button>
-                    <Radio.Button value={false}>Нет</Radio.Button>
+                  <Radio.Group>
+                    <Radio.Button onClick={() => setIsOrg(true)} value={true}>
+                      Да
+                    </Radio.Button>
+                    <Radio.Button onClick={() => setIsOrg(false)} value={false}>
+                      Нет
+                    </Radio.Button>
                   </Radio.Group>
                 </Form.Item>
                 <Form.Item>

@@ -31,15 +31,12 @@ const Box = styled.div`
   border-radius: 20px;
   width: 100%;
   height: 100%;
-  align-content: center;
   flex-direction: row;
-  align-items: center;
   flex-wrap: wrap;
-  justify-content: space-between;
-  text-align: center;
 `;
 const Login = (props) => {
   const history = useHistory();
+  const [isOrg, setIsOrg] = useState(false);
 
   const [finished, setFinished] = useState(false);
   const [points, setPoints] = useState(0);
@@ -52,7 +49,11 @@ const Login = (props) => {
         console.log(data);
         window.localStorage.setItem('token', data.auth_token);
         window.localStorage.setItem('username', values.username);
-        history.push('/');
+        if (values.isOrg) {
+          history.push('/organization');
+        } else {
+          history.push('/main');
+        }
       })
       .catch((e) => setError('Неправильный логин или пароль'));
   };
@@ -105,6 +106,23 @@ const Login = (props) => {
                   <Input.Password placeholder="Пароль" />
                 </Form.Item>
                 <p style={{ color: 'red' }}>{error}</p>
+
+                <Form.Item
+                  label="Организация"
+                  name="is_org"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Это поле обязательно',
+                    },
+                  ]}
+                  tooltip="Это поле обязательно"
+                >
+                  <Radio.Group>
+                    <Radio.Button value={true}>Да</Radio.Button>
+                    <Radio.Button value={false}>Нет</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Отправить

@@ -128,24 +128,27 @@ def get_vacancy_id(request):
     result = {}
     errors = []
     if request.method == 'POST' and request.body:
-        if user_data['vacancy_id'] in user_data and user_data['vacancy_id']:
-            vacancies = Vacancies.objects.get(pk=user_data['vacancy_id'])
-            final_json = []
+        user_data = json.loads(request.body)
+        if 'vacancy_id' in user_data and user_data['vacancy_id']:
+            vacancy = Vacancies.objects.get(pk=user_data['vacancy_id'])
+            final_json = {}
             final_json['id'] = vacancy.pk
             final_json['organization'] = vacancy.organization.title
             final_json['title'] = vacancy.title
             final_json['description'] = vacancy.description
-            reqs_result = []
             vacancyRequirements = VacancyRequirements.objects.filter(vacancy=vacancy)
+            reqs_result = []
             for req in vacancyRequirements:
                 req_json = {}
                 req_json['skill'] = req.skill
                 req_json['description'] = req.description
                 reqs_result.append(req_json)
             final_json['reqs'] = reqs_result
-            result['result'] = final_json
-            return Response(result)
-            
+            # result['result'] = final_json
+            return Response(final_json, content_type="application/json")
+        return Response({'error':'no vacancy_id'})
+        
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @csrf_exempt

@@ -1,6 +1,8 @@
 import react, { useState } from 'react';
 import styled from 'styled-components';
 import { Menu, Button } from 'antd';
+import logoS from '../images/IT.png';
+import logoXL from '../images/connectIT.png';
 import {
   AppstoreOutlined,
   MenuUnfoldOutlined,
@@ -41,10 +43,10 @@ const Sidebar = () => {
               collapsed ? (
                 <img
                   style={{ width: '40px', marginLeft: '-10px' }}
-                  src="./images/IT.png"
+                  src={logoS}
                 />
               ) : (
-                <img style={{ width: '180px' }} src="./images/connectIT.png" />
+                <img style={{ width: '180px' }} src={logoXL} />
               )
             }
           ></Menu.Item>

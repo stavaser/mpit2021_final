@@ -66,5 +66,8 @@ export default {
     get_finished_courses(request) {
       return apiClient.post(`request/get_finished_courses`, request);
     },
+    get_matching_skills(request) {
+      return apiClient.post(`request/get_matching_skills`, request);
+    },
   },
 };

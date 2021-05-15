@@ -109,6 +109,9 @@ def get_org_vacancies(request):
                     final_json['title'] = vacancy.title
                     final_json['description'] = vacancy.description
                     final_json['is_active'] = vacancy.is_active
+                    final_json['salary'] = vacancy.salary
+                    final_json['address'] = vacancy.address
+                    final_json['schedule'] = vacancy.schedule
                     reqs_result = []
                     vacancyRequirements = VacancyRequirements.objects.filter(vacancy=vacancy)
                     for req in vacancyRequirements:
@@ -141,6 +144,9 @@ def get_vacancy_id(request):
             final_json['organization'] = vacancy.organization.title
             final_json['title'] = vacancy.title
             final_json['description'] = vacancy.description
+            final_json['salary'] = vacancy.salary
+            final_json['address'] = vacancy.address
+            final_json['schedule'] = vacancy.schedule
             
             list_all_result = {}
             list_result_1 = []
@@ -255,20 +261,20 @@ def post_vacancies(request):
                 for item in user_data['description_list_1']:
                     description = JobDescription_1()
                     description.vacancy = vacancy
-                    description.skill = item['text']
+                    description.text = item['text']
                     description.save()
 
 
                 for item in user_data['description_list_2']:
                     description = JobDescription_2()
                     description.vacancy = vacancy
-                    description.skill = item['text']
+                    description.text = item['text']
                     description.save()
 
                 for item in user_data['description_list_3']:
                     description = JobDescription_3()
                     description.vacancy = vacancy
-                    description.skill = item['text']
+                    description.text = item['text']
                     description.save()
 
                 for req in user_data['reqs_list']:
@@ -280,6 +286,29 @@ def post_vacancies(request):
 
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_matching_skills(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        vacancy = Vacancies.objects.get(pk=user_data['vacancy_id'])
+        skills = UserSkills.objects.filter(user=user)
+        skills_array = []
+        for skill in skills:
+            job_skills = VacancyRequirements.objects.filter(vacancy=vacancy)
+            for job_skill in job_skills:
+                if job_skill.skill == skill.skill:
+                    skills_array.append(job_skill.skill)
+        result['result'] = skills_array
+        return Response(result)
+
 
 # контроллеры курсов
 

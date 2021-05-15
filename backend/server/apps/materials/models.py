@@ -10,22 +10,29 @@ class Vacancies(models.Model):
     title = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
     salary = models.CharField(max_length=64, default='По договору', db_column="salary", verbose_name="зп", )
     address = models.CharField(max_length=64, default='')
+    schedule = models.CharField(max_length=64, default='')
     description = models.TextField(
         null=True, blank=True, db_column="description", verbose_name="Описание", )
     is_active = models.BooleanField(default=True)
 
-class JobSchedule(models.Model):
-    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
-    day = models.CharField(max_length=64, default='Свободный график')
+class VacancyRequests(models.Model):
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
+    phone = models.CharField(max_length=64)
+    status = models.CharField(max_length=64, default='Ожидается')
+    date = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления", )
 
+# Обязанности
 class JobDescription_1(models.Model):
     vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
     text = models.CharField(max_length=240, default='')
 
+# Требования
 class JobDescription_2(models.Model):
     vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
     text = models.CharField(max_length=240, default='')
 
+# Условия
 class JobDescription_3(models.Model):
     vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
     text = models.CharField(max_length=240)
@@ -122,4 +129,9 @@ class TestResult(models.Model):
     correct = models.BooleanField(default=False)
 
 
+# модели пользователя
+
+class UserSkills(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    skill = models.CharField(max_length=64)
 

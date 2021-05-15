@@ -6,7 +6,27 @@ import Cards from '../components/cards';
 import requests from '../axios/requests';
 
 import { CheckCircleFilled } from '@ant-design/icons';
-import { Row, Col, Divider, Button, Tooltip, Collapse } from 'antd';
+import {
+  Row,
+  Col,
+  Divider,
+  Button,
+  Tooltip,
+  Collapse,
+  Form,
+  Input,
+  Select,
+  Result,
+  Modal,
+} from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
+
+import {
+  PlusCircleOutlined,
+  SmileOutlined,
+  PlusOutlined,
+  MinusCircleOutlined,
+} from '@ant-design/icons';
 const { Panel } = Collapse;
 const Content = styled.div`
   width: 100%;
@@ -47,7 +67,10 @@ const Box = styled.div`
 const About = (props) => {
   const vacancy_id = props.match.params.vacancy_id;
   const [data, setData] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [resultVisible, setResultVisible] = useState(false);
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     requests.materials
@@ -57,15 +80,99 @@ const About = (props) => {
         setData(data);
       })
       .catch((e) => console.log(e));
+
+    requests.materials
+      .get_matching_skills({ vacancy_id })
+      .then(({ data }) => {
+        setSkills(data.result);
+        console.log(data);
+      })
+      .catch((e) => console.log(e));
   }, []);
-  console.log(data);
-  const getTagName = (id) => {
-    {
-      return tags.filter((x) => x.id === id).map((x) => x.name);
-    }
+
+  const onFinish = (values) => {
+    console.log(values);
+    requests.organization
+      .post_vacancy({ ...values })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          setResultVisible(true);
+        }
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
   };
+
   return (
     <>
+      <Modal
+        title="Создать новый курс"
+        onCancel={() => setVisible(false)}
+        visible={visible}
+        footer={!resultVisible && null}
+        width="800px"
+      >
+        {resultVisible ? (
+          <Result
+            icon={<SmileOutlined />}
+            title="Курс успешно создан!"
+            extra={
+              <Button onClick={() => window.location.reload(false)}>Ок</Button>
+            }
+          />
+        ) : (
+          <Form size="large" name="video" layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Название"
+              name="title"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Описание"
+              name="description"
+            >
+              <TextArea />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Ключевые навыки"
+              name="skills"
+            >
+              <Select
+                mode="tags"
+                style={{ width: '100%' }}
+                placeholder="Скилл"
+              ></Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Отправить
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
       <Navbar />
       <div style={{ display: 'flex' }}>
         <Sidebar />
@@ -96,9 +203,13 @@ const About = (props) => {
                       <div></div>
                       <div>
                         <h2>{data.organization}</h2>
-                        <p>asasd</p>
-                        <p>asdasd</p>
-                        <Button block type="primary">
+                        <p>{data.salary}</p>
+                        <p>{data.schedule}</p>
+                        <Button
+                          block
+                          type="primary"
+                          onClick={() => setVisible(true)}
+                        >
                           Подать заявку
                         </Button>
                       </div>
@@ -115,9 +226,13 @@ const About = (props) => {
                           return (
                             <Panel
                               extra={
-                                <CheckCircleFilled
-                                  style={{ color: '#17AD49' }}
-                                />
+                                skills.includes(item.skill) ? (
+                                  <CheckCircleFilled
+                                    style={{ color: '#17AD49' }}
+                                  />
+                                ) : (
+                                  false
+                                )
                               }
                               header={item.skill}
                               key={'' + index}
@@ -130,7 +245,9 @@ const About = (props) => {
                               >
                                 <div>{item.description}</div>
                                 <div>
-                                  <a>Найти курсы</a>
+                                  {!skills.includes(item.skill) && (
+                                    <a>Найти курсы</a>
+                                  )}
                                 </div>
                               </div>
                             </Panel>
@@ -158,6 +275,27 @@ const About = (props) => {
                   <Box>
                     <Title>Детали</Title>
                     <Divider />
+                    <h3>Обязанности:</h3>
+                    <ul>
+                      {data.job_info &&
+                        data.job_info.list_1.map((item) => {
+                          return <li>{item}</li>;
+                        })}
+                    </ul>
+                    <h3>Требования:</h3>
+                    <ul>
+                      {data.job_info &&
+                        data.job_info.list_2.map((item) => {
+                          return <li>{item}</li>;
+                        })}
+                    </ul>
+                    <h3>Условия:</h3>
+                    <ul>
+                      {data.job_info &&
+                        data.job_info.list_3.map((item) => {
+                          return <li>{item}</li>;
+                        })}
+                    </ul>
                   </Box>
                 </Col>
               </Row>

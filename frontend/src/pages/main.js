@@ -53,6 +53,7 @@ const Main = () => {
                     desc={item.description}
                     org={item.organization}
                     reqs={item.reqs}
+                    job_info={item.job_info}
                   />
                 );
               })}

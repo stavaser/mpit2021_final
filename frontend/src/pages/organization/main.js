@@ -269,7 +269,7 @@ const Main = () => {
                 </Form.List>
               </Col>
               <Col span={12}>
-                <h3>Информация</h3>
+                <h3>Детали</h3>
                 <Form.List
                   name="description_list_1"
                   rules={[

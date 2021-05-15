@@ -272,6 +272,13 @@ def get_org_courses(request):
             final_json['description'] = course.description
             media_count = CourseMedia.objects.filter(course=course).count()
             final_json['media_count'] = media_count
+            
+            skills = CourseSkills.objects.filter(course=course)
+            skills_array = []
+            for skill in skills:
+                skills_array.append(skill.skill)
+            final_json['skills'] = skills_array
+
             json_result.append(final_json)
 
         result['result'] = json_result
@@ -300,6 +307,13 @@ def get_courses(request):
             media_count = CourseMedia.objects.filter(course=course).count()
             final_json['media_count'] = media_count
             final_json['finished'] = CourseProgress.objects.filter(course=course, user=user).exists()
+           
+            skills = CourseSkills.objects.filter(course=course)
+            skills_array = []
+            for skill in skills:
+                skills_array.append(skill.skill)
+            final_json['skills'] = skills_array
+
             json_result.append(final_json)
 
         result['result'] = json_result
@@ -333,11 +347,40 @@ def get_courses_by_skill(request):
                     media_count = CourseMedia.objects.filter(course=course).count()
                     final_json['media_count'] = media_count
                     final_json['finished'] = CourseProgress.objects.filter(course=course, user=user).exists()
+                    
+                    skills = CourseSkills.objects.filter(course=course)
+                    skills_array = []
+                    for skill in skills:
+                        skills_array.append(skill.skill)
+                    final_json['skills'] = skills_array
+
                     json_result.append(final_json)
         result['result'] = json_result
         return Response(result, content_type="application/json")
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_finished_courses(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        finished = CourseProgress.objects.filter(user=user)
+        courses_result = []
+        for item in finished:
+            course = Courses.objects.get(pk=item.course.pk)
+            courses_json = {}
+            courses_json['course_id'] = course.pk
+            courses_json['title'] = course.title
+            courses_json['description'] = course.description
+            courses_result.append(courses_json)
+        result['result'] = courses_result
+        return Response(result)
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -379,8 +422,7 @@ def get_course_media(request):
     errors = []
     if request.method == 'POST' and request.body:
         user_data = json.loads(request.body)
-        courses = Courses.objects.get(pk=user_data['course_id'])
-        json_result = []
+        course = Courses.objects.get(pk=user_data['course_id'])
         final_json = {}
         final_json['id'] = course.pk
         final_json['organization'] = course.organization.title

@@ -68,6 +68,7 @@ const Profile = (props) => {
   const ref = React.createRef();
   const vacancy_id = props.match.params.vacancy_id;
   const [data, setData] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -76,6 +77,14 @@ const Profile = (props) => {
       .then(({ data }) => {
         console.log(data);
         setData(data);
+      })
+      .catch((e) => console.log(e));
+
+    requests.materials
+      .get_finished_courses({})
+      .then(({ data }) => {
+        console.log(data.result);
+        setCourses(data.result);
       })
       .catch((e) => console.log(e));
   }, []);
@@ -153,18 +162,6 @@ const Profile = (props) => {
                     <Title>Ваши скиллы</Title>
                     <Divider />
                     <SkillsChart />
-                    {/* <Collapse defaultActiveKey={['1']}>
-                      {data.reqs &&
-                        data.reqs.map((item, index) => {
-                          return (
-                            <Panel header={item.skill} key={'' + index}>
-                              <Tooltip title="Найти курсы">
-                                {item.description}
-                              </Tooltip>
-                            </Panel>
-                          );
-                        })}
-                    </Collapse> */}
                   </Box>
                 </Col>
               </Row>
@@ -260,6 +257,29 @@ const Profile = (props) => {
                             )}
                           />
                         </Table>
+                      </Box>
+                    </Col>
+                    <Col span={24}>
+                      <Box>
+                        <Title>Пройденные курсы</Title>
+                        <Divider />
+                        <Collapse>
+                          {courses &&
+                            courses.map((item, index) => {
+                              return (
+                                <Panel
+                                  header={
+                                    <a href={`/courses/info/` + item.course_id}>
+                                      {item.title}
+                                    </a>
+                                  }
+                                  key={'' + index}
+                                >
+                                  {item.description}
+                                </Panel>
+                              );
+                            })}
+                        </Collapse>
                       </Box>
                     </Col>
                   </Row>

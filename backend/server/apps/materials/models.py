@@ -8,15 +8,31 @@ class Vacancies(models.Model):
     organization = models.ForeignKey(
         to=Organization, on_delete=models.CASCADE, db_column="organization_id", verbose_name="Организация", )
     title = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
-    # salary = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
-    # schedule = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
+    salary = models.CharField(max_length=64, default='По договору', db_column="salary", verbose_name="зп", )
+    address = models.CharField(max_length=64, default='')
     description = models.TextField(
         null=True, blank=True, db_column="description", verbose_name="Описание", )
     is_active = models.BooleanField(default=True)
 
+class JobSchedule(models.Model):
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
+    day = models.CharField(max_length=64, default='Свободный график')
+
+class JobDescription_1(models.Model):
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
+    text = models.CharField(max_length=240, default='')
+
+class JobDescription_2(models.Model):
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
+    text = models.CharField(max_length=240, default='')
+
+class JobDescription_3(models.Model):
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
+    text = models.CharField(max_length=240)
+
+
 class VacancyRequirements(models.Model):
-    vacancy = models.ForeignKey(
-        to=Vacancies, on_delete=models.CASCADE,)
+    vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE,)
     skill = models.CharField(max_length=64)
     description = models.TextField(
         null=True, blank=True, db_column="description", verbose_name="Описание", )
@@ -43,6 +59,11 @@ class CourseMedia(models.Model):
 class CourseProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(to=Courses, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not CourseProgress.objects.filter(user=self.user, course=self.course).exists():
+            super().save(*args, **kwargs)
+
 
 class CourseMediaProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

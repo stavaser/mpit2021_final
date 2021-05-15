@@ -98,6 +98,7 @@ const Courses = () => {
                     org={item.organization}
                     reqs={item.reqs}
                     finished={item.finished}
+                    skills={item.skills}
                   />
                 );
               })}

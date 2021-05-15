@@ -57,7 +57,9 @@ const Choices = styled.ul`
 `;
 
 const MainTitle = styled.h1``;
-const SecondaryTitle = styled.h3``;
+const SecondaryTitle = styled.h3`
+  text-align: center;
+`;
 
 const RadioGroup = styled.div`
   .ant-radio-button-wrapper:first-child:last-child {
@@ -81,17 +83,18 @@ const RadioGroup = styled.div`
 const CourseMaterial = (props) => {
   const course_id = props.match.params.course_id;
   //   const { courses, title, stage_theory_id } = params;
-  const courses = [
-    {
-      title: 'e',
-      link: 'w',
-    },
-    {
-      title: 'e2',
-      link: 'w2',
-    },
-  ];
-  console.log(courses[0].title);
+  // const courses = [
+  // {
+  //   title: 'e',
+  //   link: 'w',
+  // },
+  // {
+  //   title: 'e2',
+  //   link: 'w2',
+  // },
+  // ];
+  const [courses, setCourses] = useState([{}]);
+
   const [answerId, setAnswerId] = useState(null);
   const [last, setLast] = useState(false);
   const [result, setResult] = useState(false);
@@ -101,6 +104,19 @@ const CourseMaterial = (props) => {
   const history = useHistory();
   const [answered, setAnswered] = useState(false);
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    requests.materials
+      .get_course_media({ course_id })
+      .then(({ data }) => {
+        console.log(data.media[0].title);
+        console.log(data);
+        console.log(data.media[0].title);
+
+        setCourses(data.media);
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   const next = () => {
     setAnswered(false);
@@ -136,7 +152,6 @@ const CourseMaterial = (props) => {
       />
     </>
   );
-  const labels = ['A', 'B', 'C', 'D', 'E'];
   return (
     <React.Fragment>
       <Navbar />
@@ -159,17 +174,17 @@ const CourseMaterial = (props) => {
                       <Col span={24}>
                         <Box>
                           <SecondaryTitle>
-                            weqweqw {courses[active].title}
+                            {courses[active].title}
                           </SecondaryTitle>
 
                           <ReactPlayer
                             controls={true}
                             width="100%"
                             style={{ margin: '20px 0' }}
-                            url={'https://www.youtube.com/watch?v='}
+                            url={courses[active].video}
                           />
-                          <Divider orientation="left">Описание</Divider>
-                          <span>{courses[active].title}</span>
+                          <Divider orientation="center">Описание</Divider>
+                          <span>{courses[active].description}</span>
                         </Box>
                       </Col>
                     </Row>

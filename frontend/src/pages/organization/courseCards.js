@@ -44,8 +44,8 @@ const Radius = styled.span`
   }
 `;
 const CourseCards = (params) => {
-  const { id, reqs, title, org, desc } = params;
-
+  const { id, reqs, title, org, desc, skills } = params;
+  console.log('skills', skills);
   return (
     <React.Fragment>
       <Col xs={24} sm={24} md={12} lg={8} xxl={6} xxxl={6}>
@@ -64,8 +64,9 @@ const CourseCards = (params) => {
               {title}
             </h2>
           </Link>
+
           <img src={course_image} />
-          {reqs &&
+          {/* {reqs &&
             reqs.map((item) => {
               return (
                 <Tooltip title="Найти курсы">
@@ -80,8 +81,11 @@ const CourseCards = (params) => {
                   </Button>
                 </Tooltip>
               );
+            })} */}
+          {skills &&
+            skills.skills.map((item) => {
+              return <div>{item}</div>;
             })}
-
           <Divider />
           <Link to={{ pathname: 'courses/info/' + id }}>
             <Button type="primary" block>

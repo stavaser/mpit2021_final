@@ -141,6 +141,25 @@ def get_vacancy_id(request):
             final_json['organization'] = vacancy.organization.title
             final_json['title'] = vacancy.title
             final_json['description'] = vacancy.description
+            
+            list_all_result = {}
+            list_result_1 = []
+            jobDescription_1 = JobDescription_1.objects.filter(vacancy=vacancy)
+            for item in jobDescription_1:
+                list_result_1.append(item.text)
+            list_result_2 = []
+            jobDescription_2 = JobDescription_2.objects.filter(vacancy=vacancy)
+            for item in jobDescription_2:
+                list_result_2.append(item.text)
+            list_result_3 = []
+            jobDescription_3 = JobDescription_3.objects.filter(vacancy=vacancy)
+            for item in jobDescription_3:
+                list_result_3.append(item.text)
+
+            list_all_result['list_1'] = list_result_1
+            list_all_result['list_2'] = list_result_2
+            list_all_result['list_3'] = list_result_3
+
             vacancyRequirements = VacancyRequirements.objects.filter(vacancy=vacancy)
             reqs_result = []
             for req in vacancyRequirements:
@@ -149,6 +168,7 @@ def get_vacancy_id(request):
                 req_json['description'] = req.description
                 reqs_result.append(req_json)
             final_json['reqs'] = reqs_result
+            final_json['job_info'] = list_all_result
             # result['result'] = final_json
             return Response(final_json, content_type="application/json")
         return Response({'error':'no vacancy_id'})
@@ -170,6 +190,28 @@ def get_vacancies(request):
             final_json['organization'] = vacancy.organization.title
             final_json['title'] = vacancy.title
             final_json['description'] = vacancy.description
+            
+            list_all_result = {}
+
+            list_result_1 = []
+            jobDescription_1 = JobDescription_1.objects.filter(vacancy=vacancy)
+            for item in jobDescription_1:
+                list_result_1.append(item.text)
+            list_all_result['list_1'] = list_result_1
+            list_result_2 = []
+            jobDescription_2 = JobDescription_2.objects.filter(vacancy=vacancy)
+            for item in jobDescription_2:
+                list_result_2.append(item.text)
+
+            list_all_result['list_2'] = list_result_2
+
+            list_result_3 = []
+            jobDescription_3 = JobDescription_3.objects.filter(vacancy=vacancy)
+            for item in jobDescription_3:
+                list_result_3.append(item.text)
+
+            list_all_result['list_3'] = list_result_3
+
             reqs_result = []
             vacancyRequirements = VacancyRequirements.objects.filter(vacancy=vacancy)
             for req in vacancyRequirements:
@@ -177,7 +219,10 @@ def get_vacancies(request):
                 req_json['skill'] = req.skill
                 req_json['description'] = req.description
                 reqs_result.append(req_json)
+
             final_json['reqs'] = reqs_result
+            final_json['job_info'] = list_all_result
+            
             json_result.append(final_json)
 
         result['result'] = json_result
@@ -237,7 +282,6 @@ def post_vacancies(request):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 # контроллеры курсов
-
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

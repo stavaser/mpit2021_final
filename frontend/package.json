@@ -13,20 +13,17 @@
     "antd": "^4.15.5",
     "axios": "^0.21.1",
     "craco-less": "^1.17.1",
-    "html2canvas": "^1.0.0-rc.7",
-    "jspdf": "^1.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-player": "^2.9.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-to-pdf": "^0.0.13",
     "styled-components": "^5.3.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "craco --max_old_space_size=4096 start",
+    "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },

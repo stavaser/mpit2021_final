@@ -26,8 +26,6 @@ const Sidebar = () => {
     <div style={{ marginRight: '100px' }}>
       <Container style={{ height: '100vh' }}>
         <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
           mode="inline"
           subMenuCloseDelay={0}
           inlineCollapsed={collapsed}

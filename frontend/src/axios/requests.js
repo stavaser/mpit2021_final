@@ -16,6 +16,9 @@ export default {
     logout(request) {
       return apiClient.get(`accounts/token/logout/`, request);
     },
+    register(request) {
+      return apiClient.post(`accounts/users/`, request);
+    },
     get_user(request) {
       return apiClient.get(`accounts/users/me/`, request);
     },

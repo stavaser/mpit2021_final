@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-# from . import views
+from . import views
 
 router = routers.DefaultRouter()
 
@@ -9,5 +9,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('accounts/', include('apps.accounts.urls')),
    
-    # path("request/request_sms", views.request_sms, name="request_sms"),
+    path("request/register", views.register, name="register"),
 ]

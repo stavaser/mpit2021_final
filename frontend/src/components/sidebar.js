@@ -23,7 +23,7 @@ const Sidebar = () => {
     setCollapsed(!collapsed);
   };
   return (
-    <div style={{ marginRight: '100px' }}>
+    <div style={{ marginRight: '100px', zIndex: 9999 }}>
       <Container style={{ height: '100vh' }}>
         <Menu
           mode="inline"

@@ -59,7 +59,7 @@ const Register = (props) => {
           localStorage.setItem('token', data.data.token);
           localStorage.setItem('username', data.data.name);
           console.log(data.data.name);
-          history.push('/main');
+          history.push('/organization');
         })
         .catch((e) => console.log(e));
     } else {
@@ -70,7 +70,7 @@ const Register = (props) => {
           localStorage.setItem('token', data.data.token);
           localStorage.setItem('username', data.data.name);
           console.log(data.data.name);
-          history.push('/organization');
+          history.push('/main');
         })
         .catch((e) => console.log(e));
     }

@@ -105,13 +105,14 @@ const Cards = (params) => {
             </MainInfo>
 
             <Stats>
-              {reqs.map((item) => {
-                return (
-                  <Button style={{ marginRight: '10px' }} type="dashed">
-                    {item.skill}
-                  </Button>
-                );
-              })}
+              {reqs &&
+                reqs.map((item) => {
+                  return (
+                    <Button style={{ marginRight: '10px' }} type="dashed">
+                      {item.skill}
+                    </Button>
+                  );
+                })}
               <Divider />
               {desc}
             </Stats>

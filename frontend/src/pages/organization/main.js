@@ -74,7 +74,10 @@ const Main = () => {
   useEffect(() => {
     requests.organization
       .get_org_vacancies({ s: 's' })
-      .then(({ data }) => setData(data.result))
+      .then(({ data }) => {
+        console.log(data);
+        setData(data.result);
+      })
       .catch((e) => console.log(e));
   }, []);
   console.log(data);
@@ -88,7 +91,13 @@ const Main = () => {
         width="800px"
       >
         {resultVisible ? (
-          <Result icon={<SmileOutlined />} title="Вакансия успешно создана!" />
+          <Result
+            icon={<SmileOutlined />}
+            title="Вакансия успешно создана!"
+            extra={
+              <Button onClick={() => window.location.reload(false)}>Ок</Button>
+            }
+          />
         ) : (
           <Form size="large" name="video" layout="vertical" onFinish={onFinish}>
             <Form.Item
@@ -238,23 +247,24 @@ const Main = () => {
                 onClick={showModal}
                 type="dashed"
                 block
-                style={{ minHeight: '100%' }}
+                style={{ minHeight: '300px', maxHeight: '100%' }}
               >
                 <PlusCircleOutlined style={{ fontSize: '50px' }} />
                 <p style={{ fontSize: '20px' }}>Добавить новую вакансию</p>
               </Button>
             </Col>
-            {data.map((item) => {
-              return (
-                <Cards
-                  id={1}
-                  title={item.title}
-                  desc={item.description}
-                  org={item.organization}
-                  reqs={item.reqs}
-                />
-              );
-            })}
+            {data &&
+              data.map((item) => {
+                return (
+                  <Cards
+                    id={1}
+                    title={item.title}
+                    desc={item.description}
+                    org={item.organization}
+                    reqs={item.reqs}
+                  />
+                );
+              })}
           </Row>
         </Content>
       </div>

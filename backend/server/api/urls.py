@@ -17,4 +17,5 @@ urlpatterns = [
     path("request/post_test", views.post_test, name="post_test"),
     path("request/post_vacancies", views.post_vacancies, name="post_vacancies"),
     path("request/get_org_vacancies", views.get_org_vacancies, name="get_org_vacancies"),
+    path("request/get_vacancy_id", views.get_vacancy_id, name="get_vacancy_id"),
 ]

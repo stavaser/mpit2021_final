@@ -201,15 +201,37 @@ def post_vacancies(request):
                 vacancy.organization = organization
                 vacancy.title = user_data['title']
                 vacancy.description = user_data['description']
+                vacancy.salary = user_data['salary']
+                vacancy.address = user_data['address']
+                vacancy.schedule = user_data['schedule']
                 vacancy.is_active = user_data['is_active']
                 vacancy.save()
-                if 'reqs_list'in user_data and user_data['reqs_list']:
-                    for req in user_data['reqs_list']:
-                        reqs = VacancyRequirements()
-                        reqs.vacancy = vacancy
-                        reqs.skill = req['skill']
-                        reqs.description = req['description']
-                        reqs.save()
+
+                for item in user_data['description_list_1']:
+                    description = JobDescription_1()
+                    description.vacancy = vacancy
+                    description.skill = item['text']
+                    description.save()
+
+
+                for item in user_data['description_list_2']:
+                    description = JobDescription_2()
+                    description.vacancy = vacancy
+                    description.skill = item['text']
+                    description.save()
+
+                for item in user_data['description_list_3']:
+                    description = JobDescription_3()
+                    description.vacancy = vacancy
+                    description.skill = item['text']
+                    description.save()
+
+                for req in user_data['reqs_list']:
+                    reqs = VacancyRequirements()
+                    reqs.vacancy = vacancy
+                    reqs.skill = req['skill']
+                    reqs.description = req['description']
+                    reqs.save()
 
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -119,7 +119,7 @@ const Main = () => {
         onCancel={handleCancel}
         visible={visible}
         footer={!resultVisible && null}
-        width="800px"
+        width="1200px"
       >
         {resultVisible ? (
           <Result
@@ -131,125 +131,327 @@ const Main = () => {
           />
         ) : (
           <Form size="large" name="video" layout="vertical" onFinish={onFinish}>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
+            <Row
+              gutter={[
+                { xs: 12, sm: 16, md: 24, lg: 36 },
+                { xs: 24, sm: 16, md: 24, lg: 36 },
               ]}
-              label="Название"
-              name="title"
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
-              ]}
-              label="Описание"
-              name="description"
-            >
-              <TextArea />
-            </Form.Item>
-            <Form.Item
-              name="category"
-              label="Категория"
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
-              ]}
-              style={{ flex: 2 }}
-            >
-              <Select style={{ width: '100%' }}>
-                <Option value="1">Категрия 1</Option>
-                <Option value="2">Категрия 2</Option>
-                <Option value="3">Категрия 3</Option>
-              </Select>
-            </Form.Item>
+              <Col span={12}>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Данное поле не может быть пустым',
+                    },
+                  ]}
+                  label="Название"
+                  name="title"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Данное поле не может быть пустым',
+                    },
+                  ]}
+                  label="Описание"
+                  name="description"
+                >
+                  <TextArea />
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Данное поле не может быть пустым',
+                    },
+                  ]}
+                  label="Адрес"
+                  name="address"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Данное поле не может быть пустым',
+                    },
+                  ]}
+                  label="Зарплата"
+                  name="salary"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Данное поле не может быть пустым',
+                    },
+                  ]}
+                  label="График работы"
+                  name="schedule"
+                >
+                  <Input />
+                </Form.Item>
 
-            <Form.Item
-              label="Контактная информация"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
-                { type: 'email' },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.List name="reqs_list">
-              {(fields, { add, remove }, { errors }) => (
-                <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Form.Item label={'Требование ' + (key + 1)}>
-                      <div
-                        key={key}
-                        style={{ display: 'flex', alignItems: 'baseline' }}
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'skill']}
-                          fieldKey={[fieldKey, 'skill']}
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Данное поле не может быть пустым',
-                            },
-                          ]}
-                          style={{ width: '100%', marginRight: '10px' }}
-                        >
-                          <Input placeholder="Скилл" />
+                <Form.List
+                  name="reqs_list"
+                  rules={[
+                    {
+                      validator: async (_, reqs_list) => {
+                        if (!reqs_list || reqs_list.length == 0) {
+                          return Promise.reject(
+                            new Error('Добавьте хотя-бы один материал')
+                          );
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  {(fields, { add, remove }, { errors }) => (
+                    <>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Form.Item label={'Навык ' + (key + 1)}>
+                          <div
+                            key={key}
+                            style={{ display: 'flex', alignItems: 'baseline' }}
+                          >
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'skill']}
+                              fieldKey={[fieldKey, 'skill']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Данное поле не может быть пустым',
+                                },
+                              ]}
+                              style={{ width: '100%', marginRight: '10px' }}
+                            >
+                              <Input placeholder="Навык" />
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'description']}
+                              fieldKey={[fieldKey, 'description']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Данное поле не может быть пустым',
+                                },
+                              ]}
+                              style={{ width: '100%', marginRight: '10px' }}
+                            >
+                              <Input placeholder="Описание" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </div>
                         </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'description']}
-                          fieldKey={[fieldKey, 'description']}
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Данное поле не может быть пустым',
-                            },
-                          ]}
-                          style={{ width: '100%', marginRight: '10px' }}
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
                         >
-                          <Input placeholder="Описание" />
+                          Добавить необходимые навыки
+                        </Button>
+                      </Form.Item>
+                      <Form.ErrorList errors={errors} />
+                    </>
+                  )}
+                </Form.List>
+              </Col>
+              <Col span={12}>
+                <h3>Информация</h3>
+                <Form.List
+                  name="description_list_1"
+                  rules={[
+                    {
+                      validator: async (_, description_list_1) => {
+                        if (
+                          !description_list_1 ||
+                          description_list_1.length == 0
+                        ) {
+                          return Promise.reject(
+                            new Error('Добавьте хотя-бы один материал')
+                          );
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  {(fields, { add, remove }, { errors }) => (
+                    <>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Form.Item label={'Обязанность ' + (key + 1)}>
+                          <div
+                            key={key}
+                            style={{ display: 'flex', alignItems: 'baseline' }}
+                          >
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'text']}
+                              fieldKey={[fieldKey, 'text']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Данное поле не может быть пустым',
+                                },
+                              ]}
+                              style={{ width: '100%', marginRight: '10px' }}
+                            >
+                              <Input placeholder="Обязанность" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </div>
                         </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </div>
-                    </Form.Item>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Добавить требования
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Добавить обязанности
+                        </Button>
+                      </Form.Item>
+                      <Form.ErrorList errors={errors} />
+                    </>
+                  )}
+                </Form.List>
+                <Form.List
+                  name="description_list_2"
+                  rules={[
+                    {
+                      validator: async (_, description_list_2) => {
+                        if (
+                          !description_list_2 ||
+                          description_list_2.length == 0
+                        ) {
+                          return Promise.reject(
+                            new Error('Добавьте хотя-бы один материал')
+                          );
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  {(fields, { add, remove }, { errors }) => (
+                    <>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Form.Item label={'Требование ' + (key + 1)}>
+                          <div
+                            key={key}
+                            style={{ display: 'flex', alignItems: 'baseline' }}
+                          >
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'text']}
+                              fieldKey={[fieldKey, 'text']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Данное поле не может быть пустым',
+                                },
+                              ]}
+                              style={{ width: '100%', marginRight: '10px' }}
+                            >
+                              <Input placeholder="Требование" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </div>
+                        </Form.Item>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Добавить требования
+                        </Button>
+                      </Form.Item>
+                      <Form.ErrorList errors={errors} />
+                    </>
+                  )}
+                </Form.List>
+                <Form.List
+                  name="description_list_3"
+                  rules={[
+                    {
+                      validator: async (_, description_list_3) => {
+                        if (
+                          !description_list_3 ||
+                          description_list_3.length == 0
+                        ) {
+                          return Promise.reject(
+                            new Error('Добавьте хотя-бы один материал')
+                          );
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  {(fields, { add, remove }, { errors }) => (
+                    <>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Form.Item label={'Условие ' + (key + 1)}>
+                          <div
+                            key={key}
+                            style={{ display: 'flex', alignItems: 'baseline' }}
+                          >
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'text']}
+                              fieldKey={[fieldKey, 'text']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Данное поле не может быть пустым',
+                                },
+                              ]}
+                              style={{ width: '100%', marginRight: '10px' }}
+                            >
+                              <Input placeholder="Условие" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </div>
+                        </Form.Item>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Добавить условия
+                        </Button>
+                      </Form.Item>
+                      <Form.ErrorList errors={errors} />
+                    </>
+                  )}
+                </Form.List>
 
-            <Form.Item name="is_active" valuePropName="checked">
-              <Checkbox>Активное</Checkbox>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Отправить
-              </Button>
-            </Form.Item>
+                <Form.Item name="is_active" valuePropName="checked">
+                  <Checkbox>Активное</Checkbox>
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Отправить
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         )}
       </Modal>

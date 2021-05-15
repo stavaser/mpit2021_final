@@ -26,6 +26,7 @@ import {
 } from '@ant-design/icons';
 import requests from '../../axios/requests';
 import TextArea from 'antd/lib/input/TextArea';
+import { useHistory } from 'react-router';
 const { Option } = Select;
 
 const Content = styled.div`
@@ -37,6 +38,7 @@ const Content = styled.div`
 const MainTitle = styled.h1``;
 
 const Main = () => {
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [courses, setCourses] = useState([]);
   const [tags, setTags] = useState([]);
@@ -108,6 +110,8 @@ const Main = () => {
       .catch((e) => console.log(e));
   }, []);
   console.log(data);
+  console.log(localStorage.getItem('username'));
+  console.log(localStorage.getItem('token'));
   return (
     <>
       <Modal

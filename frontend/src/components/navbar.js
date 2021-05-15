@@ -1,7 +1,8 @@
 import react from 'react';
 import styled from 'styled-components';
-import { Input, Space } from 'antd';
+import { Input, Button } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -37,7 +38,11 @@ const Navbar = () => {
       }}
     />
   );
-
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('isOrg');
+  };
   const onSearch = (value) => console.log(value);
 
   return (
@@ -52,7 +57,14 @@ const Navbar = () => {
           enterButton
         />
       </div>
-      <div className="profile">{localStorage.getItem('username')}</div>
+      {localStorage.getItem('username') ? (
+        <>
+          <div className="profile">{localStorage.getItem('username')}</div>
+          <Button onClick={() => logout()}>Выйти</Button>
+        </>
+      ) : (
+        <Link to={{ pathname: '/login' }}>Войти</Link>
+      )}
     </StyledNavbar>
   );
 };

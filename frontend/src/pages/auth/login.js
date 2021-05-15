@@ -43,20 +43,25 @@ const Login = (props) => {
   const [error, setError] = useState();
   const onFinish = (values) => {
     console.log(values);
+    console.log(values.is_org);
     requests.accounts
       .login(values)
       .then(({ data }) => {
         console.log(data);
-        window.localStorage.setItem('token', data.auth_token);
-        window.localStorage.setItem('username', values.username);
-        if (values.isOrg) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.name);
+        if (values.is_org) {
+          localStorage.setItem('isOrg', true);
           history.push('/organization');
         } else {
+          localStorage.setItem('isOrg', false);
           history.push('/main');
         }
       })
       .catch((e) => setError('Неправильный логин или пароль'));
   };
+  console.log(localStorage.getItem('token'));
+  console.log(localStorage.getItem('username'));
 
   return (
     <>

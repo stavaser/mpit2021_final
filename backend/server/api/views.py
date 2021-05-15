@@ -24,11 +24,16 @@ def user_login(request):
     if 'username' in user_data and user_data['username']:
         username = user_data['username']
     user = User.objects.get(username=username)
+    org = Organization.objects.filter(user=user).exists()
     if not user:
         return Response({'error':'no user'})
-    else:
-        token = Token.objects.get(user=user)
-        return Response({'token':token.key, 'name':user.username})
+    elif user_data['is_org'] != org:
+        return Response({'error':'no org or user'})
+    token, _ = Token.objects.get_or_create(user=user)
+    result['token'] = token.key
+    result['name'] = user.username
+    result['isOrg'] = org
+    return Response(result)
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -276,7 +281,9 @@ def get_courses(request):
     errors = []
     if request.method == 'POST' and request.body:
         user_data = json.loads(request.body)
-        courses = Courses.objects.all().order_by('-pk')
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        courses = Courses.objects.filter(is_active=True).order_by('-pk')
         json_result = []
         for course in courses:
             final_json = {}
@@ -286,6 +293,7 @@ def get_courses(request):
             final_json['description'] = course.description
             media_count = CourseMedia.objects.filter(course=course).count()
             final_json['media_count'] = media_count
+            final_json['finished'] = CourseProgress.objects.filter(user=user).exists()
             json_result.append(final_json)
 
         result['result'] = json_result
@@ -293,6 +301,23 @@ def get_courses(request):
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def post_finished(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        course = Courses.objects.get(pk=user_data['course_id'])
+        courseProgress = CourseProgress()
+        courseProgress.user = user
+        courseProgress.course = course
+        courseProgress.save()
+        return Response(status=status.HTTP_200_OK)
+       
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @csrf_exempt
@@ -322,6 +347,7 @@ def get_course_media(request):
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+# контроллеры тестов
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

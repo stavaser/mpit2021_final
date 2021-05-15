@@ -99,7 +99,7 @@ const Cards = (params) => {
 
           <p>Якутск, Россия</p>
           <Divider style={{ margin: 0, marginTop: '10px' }} />
-          <Link to={{ pathname: 'about/' + id }}>
+          <Link to={{ pathname: '/organization/about/' + id }}>
             <h2>{title}</h2>
           </Link>
           <p>от 150 000 р.</p>
@@ -117,7 +117,9 @@ const Cards = (params) => {
             })}
           <Divider />
           <Button type="primary" block>
-            <Link to={{ pathname: 'about/' + id }}>Посмотреть</Link>
+            <Link to={{ pathname: '/organization/about/' + id }}>
+              Посмотреть
+            </Link>
           </Button>
         </Card>
       </Col>

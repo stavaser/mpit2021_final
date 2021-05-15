@@ -78,7 +78,8 @@ const RadioGroup = styled.div`
   }
 `;
 
-const CourseMaterial = (params) => {
+const CourseMaterial = (props) => {
+  const course_id = props.match.params.course_id;
   //   const { courses, title, stage_theory_id } = params;
   const courses = [
     {
@@ -113,12 +114,9 @@ const CourseMaterial = (params) => {
   const finish = () => {
     setLast(true);
     message.success('все!');
-  };
-
-  const reset = () => {
-    setLast(false);
-    setAnswers([]);
-    setActive(0);
+    requests.materials
+      .post_finished({ course_id })
+      .catch((e) => console.log(e));
   };
 
   const answer = () => {

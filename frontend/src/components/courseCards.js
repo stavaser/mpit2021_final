@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Col, Button, Divider, Tooltip } from 'antd';
+import { Col, Button, Divider, Tooltip, Progress } from 'antd';
 import course_image from '../images/course_image.png';
 import {
   CalendarOutlined,
@@ -44,7 +44,7 @@ const Radius = styled.span`
   }
 `;
 const CourseCards = (params) => {
-  const { id, reqs, title, org, desc } = params;
+  const { id, reqs, title, org, desc, finished } = params;
 
   return (
     <React.Fragment>
@@ -83,11 +83,15 @@ const CourseCards = (params) => {
             })}
 
           <Divider />
-          <Link to={{ pathname: 'courses/info/' + id }}>
-            <Button type="primary" block>
-              Пройти
-            </Button>
-          </Link>
+          {finished ? (
+            <Progress percent={100} />
+          ) : (
+            <Link to={{ pathname: 'courses/info/' + id }}>
+              <Button type="primary" block>
+                Пройти
+              </Button>
+            </Link>
+          )}
         </Card>
       </Col>
     </React.Fragment>

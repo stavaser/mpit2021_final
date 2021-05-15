@@ -20,7 +20,7 @@ class VacancyRequirements(models.Model):
     skill = models.CharField(max_length=64)
     description = models.TextField(
         null=True, blank=True, db_column="description", verbose_name="Описание", )
-    
+
 # модели курсов
 
 class Courses(models.Model):
@@ -29,6 +29,10 @@ class Courses(models.Model):
     title = models.CharField(max_length=64, db_column="title", verbose_name="Название", )
     description = models.TextField(null=True, blank=True, db_column="description", verbose_name="Описание", )
     is_active = models.BooleanField(default=True)
+
+class CourseSkills(models.Model):
+    course = models.ForeignKey(to=Courses, on_delete=models.CASCADE)
+    skill = models.TextField(null=True, blank=True, db_column="skill", verbose_name="skill", )
 
 class CourseMedia(models.Model):
     course = models.ForeignKey(to=Courses, on_delete=models.CASCADE)

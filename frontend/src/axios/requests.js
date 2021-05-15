@@ -54,5 +54,8 @@ export default {
     get_courses(request) {
       return apiClient.post(`request/get_courses`, request);
     },
+    post_finished(request) {
+      return apiClient.post(`request/post_finished`, request);
+    },
   },
 };

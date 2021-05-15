@@ -53,6 +53,7 @@ const Courses = () => {
                     desc={item.description}
                     org={item.organization}
                     reqs={item.reqs}
+                    finished={item.finished}
                   />
                 );
               })}

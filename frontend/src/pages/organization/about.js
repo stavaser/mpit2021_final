@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Navbar from '../components/navbar';
-import Sidebar from '../components/sidebar';
-import Cards from '../components/cards';
-import requests from '../axios/requests';
+import Navbar from '../../components/navbar';
+import Sidebar from '../../components/sidebar';
+import requests from '../../axios/requests';
+import {
+  Row,
+  Col,
+  Divider,
+  Button,
+  Tooltip,
+  Collapse,
+  message,
+  Table,
+  Space,
+  Popconfirm,
+} from 'antd';
 
-import { CheckCircleFilled } from '@ant-design/icons';
-import { Row, Col, Divider, Button, Tooltip, Collapse } from 'antd';
 const { Panel } = Collapse;
+const { Column, ColumnGroup } = Table;
 const Content = styled.div`
   width: 100%;
   padding: 0 5%;
@@ -64,6 +74,26 @@ const About = (props) => {
       return tags.filter((x) => x.id === id).map((x) => x.name);
     }
   };
+
+  const confirm_delete = (e) => {
+    console.log(e);
+    message.success('Click on Yes');
+  };
+  const confirm_add = (phone, quest_id) => {
+    console.log('quest_id', quest_id);
+    console.log('phone', phone);
+
+    requests.quests
+      .edit_member({ quest_id, phone, action: 'add' })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          window.location.reload(false);
+        }
+      })
+      .catch((e) => console.log(e.message));
+  };
+
   return (
     <>
       <Navbar />
@@ -99,7 +129,7 @@ const About = (props) => {
                         <p>asasd</p>
                         <p>asdasd</p>
                         <Button block type="primary">
-                          Подать заявку
+                          Редактировать
                         </Button>
                       </div>
                     </div>
@@ -113,15 +143,7 @@ const About = (props) => {
                       {data.reqs &&
                         data.reqs.map((item, index) => {
                           return (
-                            <Panel
-                              extra={
-                                <CheckCircleFilled
-                                  style={{ color: '#17AD49' }}
-                                />
-                              }
-                              header={item.skill}
-                              key={'' + index}
-                            >
+                            <Panel header={item.skill} key={'' + index}>
                               <Tooltip title="Найти курсы">
                                 {item.description}
                               </Tooltip>
@@ -147,10 +169,72 @@ const About = (props) => {
                 ]}
               >
                 <Col span={24}>
-                  <Box>
-                    <Title>Детали</Title>
-                    <Divider />
-                  </Box>
+                  <Row
+                    gutter={[
+                      { xs: 12, sm: 16, md: 24, lg: 36 },
+                      { xs: 24, sm: 16, md: 24, lg: 36 },
+                    ]}
+                  >
+                    <Col span={24}>
+                      <Box>
+                        <Title>Детали</Title>
+                        <Divider />
+                      </Box>
+                    </Col>
+                    <Col span={24}>
+                      <Box>
+                        <Title>Входяшие заявки</Title>
+                        <Divider />
+                        <Table
+                          //  dataSource={request.result}
+                          locale={{
+                            emptyText: 'Нет новых заявок',
+                          }}
+                        >
+                          <Column title="Имя" dataIndex="username" key="name" />
+                          <Column title="Номер" dataIndex="phone" key="phone" />
+                          <Column
+                            title="Дата"
+                            dataIndex="add_date"
+                            key="add_date"
+                          />
+
+                          <Column
+                            title="Резюме"
+                            dataIndex="title"
+                            key="title"
+                          />
+                          <Column
+                            title="Действие"
+                            key="action"
+                            dataIndex="phone"
+                            render={(phone, item) => (
+                              <Space size="middle">
+                                <Popconfirm
+                                  title={`Вы действительно хотите принять эту заявку?`}
+                                  onConfirm={() =>
+                                    confirm_add(phone, item.quest_id)
+                                  }
+                                  okText="Да"
+                                  cancelText="Нет"
+                                >
+                                  <a> Принять</a>
+                                </Popconfirm>
+                                <Popconfirm
+                                  title={`Вы действительно хотите отклонить эту заявку?`}
+                                  onConfirm={() => confirm_delete(phone)}
+                                  okText="Да"
+                                  cancelText="Нет"
+                                >
+                                  <a>Отклонить</a>
+                                </Popconfirm>
+                              </Space>
+                            )}
+                          />
+                        </Table>
+                      </Box>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </Col>

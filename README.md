@@ -2,11 +2,15 @@
 ### MPIT 2021 FINAL
 ---------------------
 ## Docker
-
+Скачайте репозиторий и запустите билд
 
 ```sh
 git clone https://github.com/stavaser/mpit2021_final
+```
+```sh
 cd mpit2021_final
+```
+```sh
 docker-compose -f docker-compose-dev.yml up --build
 ```
 

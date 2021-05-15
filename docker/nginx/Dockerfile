@@ -3,7 +3,7 @@ FROM node:13.12.0-alpine as build
 WORKDIR /app/frontend
 COPY ./frontend/package.json ./
 COPY ./frontend/package-lock.json ./
-RUN npm install --legacy-peer-deps
+RUN npm ci
 COPY ./frontend/ ./
 RUN npm run build
 

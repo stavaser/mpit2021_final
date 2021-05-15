@@ -12,6 +12,9 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 import json
+import datetime
+
+# контроллеры авторизации
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -87,6 +90,9 @@ def org_register(request):
     result["name"] = organization.title
     result["token"] = token.key
     return Response(result, content_type="application/json")
+
+
+# контроллеры вакансий
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -309,6 +315,50 @@ def get_matching_skills(request):
         result['result'] = skills_array
         return Response(result)
 
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_vacancy_requests(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        organization = Organization.objects.get(user=token.user)
+        vacancy = Vacancies.objects.get(pk=user_data['vacancy_id'])
+        vacancyRequests = VacancyRequests.objects.filter(vacancy=vacancy).order_by('-pk')
+        request_result = []
+        for request in vacancyRequests:
+            request_json = {}
+            request_json['phone'] = request.phone
+            request_json['status'] = request.status
+            request_json['name'] = request.name
+            request_json['user_id'] = request.user.pk
+            request_json['date'] = request.date.strftime('%d.%m.%Y')
+            request_result.append(request_json)
+        result['result'] = request_result
+        return Response(result)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def post_vacancy_request(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        vacancy = Vacancies.objects.get(pk=user_data['vacancy_id'])
+        vacancyRequest = VacancyRequests()
+        vacancyRequest.vacancy = vacancy
+        vacancyRequest.user = user
+        vacancyRequest.name = user.username
+        vacancyRequest.phone = user_data['phone']
+        vacancyRequest.save()
+        return Response(status=status.HTTP_200_OK)
 
 # контроллеры курсов
 

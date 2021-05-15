@@ -92,8 +92,8 @@ const About = (props) => {
 
   const onFinish = (values) => {
     console.log(values);
-    requests.organization
-      .post_vacancy({ ...values })
+    requests.materials
+      .post_vacancy_request({ vacancy_id, ...values })
       .then((response) => {
         console.log(response);
         if (response.status == 200) {
@@ -123,17 +123,14 @@ const About = (props) => {
             }
           />
         ) : (
-          <Form size="large" name="video" layout="vertical" onFinish={onFinish}>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
-              ]}
-              label="Название"
-              name="title"
-            >
+          <Form
+            size="large"
+            name="video"
+            layout="vertical"
+            initialValues={{ name: localStorage.getItem('username') }}
+            onFinish={onFinish}
+          >
+            <Form.Item disabled label="Имя" name="name">
               <Input />
             </Form.Item>
             <Form.Item
@@ -143,26 +140,10 @@ const About = (props) => {
                   message: 'Данное поле не может быть пустым',
                 },
               ]}
-              label="Описание"
-              name="description"
+              label="Номер телефона"
+              name="phone"
             >
-              <TextArea />
-            </Form.Item>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: 'Данное поле не может быть пустым',
-                },
-              ]}
-              label="Ключевые навыки"
-              name="skills"
-            >
-              <Select
-                mode="tags"
-                style={{ width: '100%' }}
-                placeholder="Скилл"
-              ></Select>
+              <Input />
             </Form.Item>
 
             <Form.Item>

@@ -28,4 +28,6 @@ urlpatterns = [
     path("request/get_course_skills", views.get_course_skills, name="get_course_skills"),
     path("request/get_finished_courses", views.get_finished_courses, name="get_finished_courses"),
     path("request/get_matching_skills", views.get_matching_skills, name="get_matching_skills"),
+    path("request/get_vacancy_requests", views.get_vacancy_requests, name="get_vacancy_requests"),
+    path("request/post_vacancy_request", views.post_vacancy_request, name="post_vacancy_request"),
 ]

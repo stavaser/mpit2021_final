@@ -18,6 +18,7 @@ class Vacancies(models.Model):
 class VacancyRequests(models.Model):
     vacancy = models.ForeignKey(to=Vacancies, on_delete=models.CASCADE )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
+    name = models.CharField(max_length=64)
     phone = models.CharField(max_length=64)
     status = models.CharField(max_length=64, default='Ожидается')
     date = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления", )

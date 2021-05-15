@@ -40,6 +40,9 @@ export default {
     post_course(request) {
       return apiClient.post(`request/post_course`, request);
     },
+    get_vacancy_requests(request) {
+      return apiClient.post(`request/get_vacancy_requests`, request);
+    },
   },
   materials: {
     get_vacancies(request) {
@@ -68,6 +71,9 @@ export default {
     },
     get_matching_skills(request) {
       return apiClient.post(`request/get_matching_skills`, request);
+    },
+    post_vacancy_request(request) {
+      return apiClient.post(`request/post_vacancy_request`, request);
     },
   },
 };

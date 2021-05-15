@@ -58,6 +58,7 @@ const About = (props) => {
   const vacancy_id = props.match.params.vacancy_id;
   const [data, setData] = useState([]);
   const [tags, setTags] = useState([]);
+  const [job_requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     requests.materials
@@ -65,6 +66,14 @@ const About = (props) => {
       .then(({ data }) => {
         console.log(data);
         setData(data);
+      })
+      .catch((e) => console.log(e));
+
+    requests.organization
+      .get_vacancy_requests({ vacancy_id })
+      .then(({ data }) => {
+        console.log(data);
+        setRequests(data.result);
       })
       .catch((e) => console.log(e));
   }, []);
@@ -186,50 +195,29 @@ const About = (props) => {
                         <Title>Входяшие заявки</Title>
                         <Divider />
                         <Table
-                          //  dataSource={request.result}
+                          dataSource={job_requests}
                           locale={{
                             emptyText: 'Нет новых заявок',
                           }}
                         >
-                          <Column title="Имя" dataIndex="username" key="name" />
-                          <Column title="Номер" dataIndex="phone" key="phone" />
-                          <Column
-                            title="Дата"
-                            dataIndex="add_date"
-                            key="add_date"
-                          />
+                          <Column title="Имя" dataIndex="name" key="name" />
 
                           <Column
-                            title="Резюме"
-                            dataIndex="title"
-                            key="title"
+                            title="Профиль"
+                            dataIndex="user_id"
+                            key="profile"
+                            render={(user_id) => (
+                              <a href={'/see_profile/' + user_id}>Посмотреть</a>
+                            )}
                           />
+                          <Column title="Номер" dataIndex="phone" key="phone" />
+                          <Column title="Дата" dataIndex="date" key="date" />
+
                           <Column
                             title="Действие"
                             key="action"
                             dataIndex="phone"
-                            render={(phone, item) => (
-                              <Space size="middle">
-                                <Popconfirm
-                                  title={`Вы действительно хотите принять эту заявку?`}
-                                  onConfirm={() =>
-                                    confirm_add(phone, item.quest_id)
-                                  }
-                                  okText="Да"
-                                  cancelText="Нет"
-                                >
-                                  <a> Принять</a>
-                                </Popconfirm>
-                                <Popconfirm
-                                  title={`Вы действительно хотите отклонить эту заявку?`}
-                                  onConfirm={() => confirm_delete(phone)}
-                                  okText="Да"
-                                  cancelText="Нет"
-                                >
-                                  <a>Отклонить</a>
-                                </Popconfirm>
-                              </Space>
-                            )}
+                            render={() => <a>Позвонить</a>}
                           />
                         </Table>
                       </Box>

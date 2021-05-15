@@ -18,7 +18,7 @@ const Courses = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     requests.materials
-      .get_vacancies({ s: 's' })
+      .get_courses({ s: 's' })
       .then(({ data }) => {
         console.log(data);
         setData(data.result);

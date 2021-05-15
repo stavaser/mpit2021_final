@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Navbar from '../../components/navbar';
 import Sidebar from '../../components/sidebar';
-import Cards from '../../components/cards';
+import Cards from './cards';
+import CourseCards from './courseCards';
 import {
   Row,
   Col,
@@ -15,6 +16,7 @@ import {
   Button,
   Radio,
   InputNumber,
+  Divider,
 } from 'antd';
 import {
   PlusCircleOutlined,
@@ -30,16 +32,19 @@ const Content = styled.div`
   width: 100%;
   padding: 0 5%;
   margin-top: 20px;
+  margin-bottom: 50px;
 `;
 const MainTitle = styled.h1``;
 
 const Main = () => {
   const [data, setData] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [resultVisible, setResultVisible] = useState(false);
 
   const [visible, setVisible] = useState(false);
+  const [visible_course, setVisibleCourse] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
   const [profile, setProfile] = useState([]);
@@ -54,18 +59,33 @@ const Main = () => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
-    requests.organization
-      .post_vacancy({ ...values })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          setResultVisible(true);
-        }
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+    if (visible) {
+      console.log(values);
+      requests.organization
+        .post_vacancy({ ...values })
+        .then((response) => {
+          console.log(response);
+          if (response.status == 200) {
+            setResultVisible(true);
+          }
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+    } else {
+      console.log(values);
+      requests.organization
+        .post_course({ ...values })
+        .then((response) => {
+          console.log(response);
+          if (response.status == 200) {
+            setResultVisible(true);
+          }
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+    }
   };
 
   const handleCancel = () => {
@@ -77,6 +97,13 @@ const Main = () => {
       .then(({ data }) => {
         console.log(data);
         setData(data.result);
+      })
+      .catch((e) => console.log(e));
+    requests.organization
+      .get_org_courses({ s: 's' })
+      .then(({ data }) => {
+        console.log(data);
+        setCourses(data.result);
       })
       .catch((e) => console.log(e));
   }, []);
@@ -222,6 +249,126 @@ const Main = () => {
           </Form>
         )}
       </Modal>
+      <Modal
+        title="Создать новый курс"
+        onCancel={() => setVisibleCourse(false)}
+        visible={visible_course}
+        footer={!resultVisible && null}
+        width="800px"
+      >
+        {resultVisible ? (
+          <Result
+            icon={<SmileOutlined />}
+            title="Курс успешно создан!"
+            extra={
+              <Button onClick={() => window.location.reload(false)}>Ок</Button>
+            }
+          />
+        ) : (
+          <Form size="large" name="video" layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Название"
+              name="title"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Данное поле не может быть пустым',
+                },
+              ]}
+              label="Описание"
+              name="description"
+            >
+              <TextArea />
+            </Form.Item>
+
+            <Form.List name="media_list">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <Form.Item label={'Видео ' + (key + 1)}>
+                      <div
+                        key={key}
+                        style={{ display: 'flex', alignItems: 'baseline' }}
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'title']}
+                          fieldKey={[fieldKey, 'title']}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Данное поле не может быть пустым',
+                            },
+                          ]}
+                          style={{ width: '100%', marginRight: '10px' }}
+                        >
+                          <Input placeholder="Название" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'video']}
+                          fieldKey={[fieldKey, 'video']}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Данное поле не может быть пустым',
+                            },
+                          ]}
+                          style={{ width: '100%', marginRight: '10px' }}
+                        >
+                          <Input placeholder="Видео" />
+                        </Form.Item>
+
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </div>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'description']}
+                        fieldKey={[fieldKey, 'description']}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Данное поле не может быть пустым',
+                          },
+                        ]}
+                        style={{ width: '100%', marginRight: '10px' }}
+                      >
+                        <TextArea placeholder="Описание" rows={4} />
+                      </Form.Item>
+                    </Form.Item>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Добавить материал
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Отправить
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
 
       <Navbar />
       <div style={{ display: 'flex' }}>
@@ -257,7 +404,47 @@ const Main = () => {
               data.map((item) => {
                 return (
                   <Cards
-                    id={1}
+                    id={item.id}
+                    title={item.title}
+                    desc={item.description}
+                    org={item.organization}
+                    reqs={item.reqs}
+                  />
+                );
+              })}
+          </Row>
+          <Divider />
+          <MainTitle>Ваши курсы</MainTitle>
+          <Row
+            gutter={[
+              { xs: 12, sm: 16, md: 24, lg: 36 },
+              { xs: 24, sm: 16, md: 24, lg: 36 },
+            ]}
+          >
+            <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={8}
+              xxl={6}
+              xxxl={6}
+              style={{ width: '100%' }}
+            >
+              <Button
+                onClick={() => setVisibleCourse(true)}
+                type="dashed"
+                block
+                style={{ minHeight: '300px', maxHeight: '100%' }}
+              >
+                <PlusCircleOutlined style={{ fontSize: '50px' }} />
+                <p style={{ fontSize: '20px' }}>Добавить новый курс</p>
+              </Button>
+            </Col>
+            {courses &&
+              courses.map((item) => {
+                return (
+                  <CourseCards
+                    id={item.id}
                     title={item.title}
                     desc={item.description}
                     org={item.organization}

@@ -34,6 +34,12 @@ export default {
     get_org_vacancies(request) {
       return apiClient.post(`request/get_org_vacancies`, request);
     },
+    get_org_courses(request) {
+      return apiClient.post(`request/get_org_courses`, request);
+    },
+    post_course(request) {
+      return apiClient.post(`request/post_course`, request);
+    },
   },
   materials: {
     get_vacancies(request) {
@@ -41,6 +47,12 @@ export default {
     },
     get_vacancy_id(request) {
       return apiClient.post(`request/get_vacancy_id`, request);
+    },
+    get_course_media(request) {
+      return apiClient.post(`request/get_course_media`, request);
+    },
+    get_courses(request) {
+      return apiClient.post(`request/get_courses`, request);
     },
   },
 };

@@ -18,4 +18,8 @@ urlpatterns = [
     path("request/post_vacancies", views.post_vacancies, name="post_vacancies"),
     path("request/get_org_vacancies", views.get_org_vacancies, name="get_org_vacancies"),
     path("request/get_vacancy_id", views.get_vacancy_id, name="get_vacancy_id"),
+    path("request/get_course_media", views.get_course_media, name="get_course_media"),
+    path("request/get_courses", views.get_courses, name="get_courses"),
+    path("request/get_org_courses", views.get_org_courses, name="get_org_courses"),
+    path("request/post_course", views.post_course, name="post_course"),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from apps.accounts.models import UserProfile
 from apps.organizations.models import Organization
-from apps.materials.models import Vacancies, VacancyRequirements, Projects, Teams, Teammates, Tests, TestQuestion, TestAnswer, TestResult
+from apps.materials.models import *
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
@@ -208,6 +208,119 @@ def post_vacancies(request):
 
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+# контроллеры курсов
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def post_course(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        if 'Authorization' in request.headers:
+            token = Token.objects.get(key=request.headers['Authorization'])
+            organization = Organization.objects.get(user=token.user)
+            if organization:
+                course = Courses()
+                course.organization = organization
+                course.title = user_data['title']
+                course.description = user_data['description']
+                course.save()
+                if 'media_list'in user_data and user_data['media_list']:
+                    for media in user_data['media_list']:
+                        course_media = CourseMedia()
+                        course_media.course = course
+                        course_media.title = media['title']
+                        course_media.description = media['description']
+                        course_media.video = media['video']
+                        course_media.save()
+
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_org_courses(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        organization = Organization.objects.get(user=token.user)
+        courses = Courses.objects.filter(organization=organization).order_by('-pk')
+        json_result = []
+        for course in courses:
+            final_json = {}
+            final_json['id'] = course.pk
+            final_json['organization'] = course.organization.title
+            final_json['title'] = course.title
+            final_json['description'] = course.description
+            media_count = CourseMedia.objects.filter(course=course).count()
+            final_json['media_count'] = media_count
+            json_result.append(final_json)
+
+        result['result'] = json_result
+        return Response(result, content_type="application/json")
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_courses(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        courses = Courses.objects.all().order_by('-pk')
+        json_result = []
+        for course in courses:
+            final_json = {}
+            final_json['id'] = course.pk
+            final_json['organization'] = course.organization.title
+            final_json['title'] = course.title
+            final_json['description'] = course.description
+            media_count = CourseMedia.objects.filter(course=course).count()
+            final_json['media_count'] = media_count
+            json_result.append(final_json)
+
+        result['result'] = json_result
+        return Response(result, content_type="application/json")
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_course_media(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        courses = Courses.objects.get(pk=user_data['course_id'])
+        json_result = []
+        final_json = {}
+        final_json['id'] = course.pk
+        final_json['organization'] = course.organization.title
+        final_json['title'] = course.title
+        final_json['description'] = course.description
+        reqs_result = []
+        courseMedia = CourseMedia.objects.filter(course=course)
+        for media in courseMedia:
+            req_json = {}
+            req_json['title'] = media.title
+            req_json['description'] = media.description
+            req_json['video'] = media.video
+            reqs_result.append(req_json)
+        final_json['media'] = reqs_result
+        result = final_json
+        return Response(result, content_type="application/json")
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 
 @api_view(["POST"])

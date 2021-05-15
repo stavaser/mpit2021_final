@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http:///localhost:8000/api/',
+  baseURL: 'http:///0.0.0.0/api/',
   headers: {
     Authorization: window.localStorage.getItem('token'),
     // 'Content-Type': 'application/json',

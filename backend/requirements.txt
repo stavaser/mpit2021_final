@@ -2,3 +2,4 @@ django==3.2.3
 djangorestframework==3.11.2
 djoser==2.0.1
 django_cors_headers==3.7.0
+django_utils_six==2.0

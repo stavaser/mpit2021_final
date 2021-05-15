@@ -684,6 +684,7 @@ const Main = () => {
                     desc={item.description}
                     org={item.organization}
                     reqs={item.reqs}
+                    skills={item.skills}
                   />
                 );
               })}

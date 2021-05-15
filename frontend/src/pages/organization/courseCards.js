@@ -66,25 +66,20 @@ const CourseCards = (params) => {
           </Link>
 
           <img src={course_image} />
-          {/* {reqs &&
-            reqs.map((item) => {
-              return (
-                <Tooltip title="Найти курсы">
-                  <Button
-                    size="small"
-                    style={{
-                      marginRight: '10px',
-                      marginTop: '20px',
-                    }}
-                  >
-                    {item.skill}
-                  </Button>
-                </Tooltip>
-              );
-            })} */}
+
           {skills &&
-            skills.skills.map((item) => {
-              return <div>{item}</div>;
+            skills.map((item) => {
+              return (
+                <Button
+                  size="small"
+                  style={{
+                    marginRight: '10px',
+                    marginTop: '20px',
+                  }}
+                >
+                  {item}
+                </Button>
+              );
             })}
           <Divider />
           <Link to={{ pathname: 'courses/info/' + id }}>

@@ -14,7 +14,9 @@ const Content = styled.div`
 `;
 const MainTitle = styled.h1``;
 
-const Courses = () => {
+const Courses = (props) => {
+  const find_skill = props.match.params.skill;
+
   const [data, setData] = useState([]);
   const [tags, setTags] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -28,23 +30,8 @@ const Courses = () => {
       })
       .catch((e) => console.log(e));
   };
-  useEffect(() => {
-    getAllCourses();
-    requests.materials
-      .get_course_skills({})
-      .then(({ data }) => setSkills(data.result))
-      .catch((e) => console.log(e));
-  }, []);
-  console.log(data);
-  const getTagName = (id) => {
-    {
-      return tags.filter((x) => x.id === id).map((x) => x.name);
-    }
-  };
 
-  const onFinish = (values) => {
-    console.log(values);
-
+  const getCoursesBySkill = (values) => {
     requests.materials
       .get_courses_by_skill(values)
       .then(({ data }) => {
@@ -52,6 +39,24 @@ const Courses = () => {
         setData(data.result);
       })
       .catch((e) => console.log(e));
+  };
+  useEffect(() => {
+    if (find_skill) {
+      getCoursesBySkill(find_skill);
+    } else {
+      getAllCourses();
+    }
+    requests.materials
+      .get_course_skills({})
+      .then(({ data }) => setSkills(data.result))
+      .catch((e) => console.log(e));
+  }, []);
+  console.log(data);
+
+  const onFinish = (values) => {
+    console.log(values);
+
+    getCoursesBySkill(values);
   };
   console.log(skills);
   return (
@@ -61,25 +66,26 @@ const Courses = () => {
         <Sidebar />
         <Content>
           <MainTitle>Все курсы</MainTitle>
-          <Form layout="vertical" onFinish={onFinish}>
-            <Form.Item name="skills">
-              <Select
-                mode="tags"
-                style={{ width: '100%' }}
-                placeholder="Найти курсы по скиллам"
-              >
-                {skills.map((item) => {
-                  return <Option value={item}>{item}</Option>;
-                })}
-              </Select>
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-              <Button onClick={() => getAllCourses()}>Сбросить</Button>
-            </Form.Item>
+          <Form size={'large'} layout="vertical" onFinish={onFinish}>
+            <div style={{ display: 'flex' }}>
+              <Form.Item name="skills" style={{ flex: 1 }}>
+                <Select
+                  allowClear
+                  onClear={() => getAllCourses()}
+                  mode="tags"
+                  placeholder="Найти курсы по скиллам"
+                >
+                  {skills.map((item) => {
+                    return <Option value={item}>{item}</Option>;
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Найти
+                </Button>
+              </Form.Item>
+            </div>
           </Form>
 
           <Row

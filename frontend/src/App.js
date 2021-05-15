@@ -28,6 +28,7 @@ const App = () => {
         <Route exact path={'/main'} component={Main} />
         <Route exact path={'/about/:vacancy_id'} component={About} />
         <Route exact path={'/courses'} component={Courses} />
+        <Route exact path={'/courses/:skill'} component={Courses} />
         <Route
           exact
           path={'/courses/info/:course_id'}

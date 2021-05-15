@@ -3,22 +3,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Col, Button, Divider, Tooltip, Progress } from 'antd';
 import course_image from '../images/course_image.png';
-import {
-  CalendarOutlined,
-  UsergroupAddOutlined,
-  StarFilled,
-} from '@ant-design/icons';
-
-const TextBox = styled.div`
-  padding: 10px;
-  color: #b4b9ca;
-  cursor: pointer;
-  background-color: white;
-  transition: 300ms linear;
-  margin: 10px;
-  margin-top: 0;
-  background-color: red;
-`;
 
 const Card = styled.div`
   position: relative;

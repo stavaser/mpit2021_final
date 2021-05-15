@@ -108,7 +108,7 @@ const About = (props) => {
   return (
     <>
       <Modal
-        title="Создать новый курс"
+        title="Подать заявку на вакансию"
         onCancel={() => setVisible(false)}
         visible={visible}
         footer={!resultVisible && null}
@@ -117,7 +117,7 @@ const About = (props) => {
         {resultVisible ? (
           <Result
             icon={<SmileOutlined />}
-            title="Курс успешно создан!"
+            title="Заявка успешно подана!"
             extra={
               <Button onClick={() => window.location.reload(false)}>Ок</Button>
             }
@@ -227,7 +227,9 @@ const About = (props) => {
                                 <div>{item.description}</div>
                                 <div>
                                   {!skills.includes(item.skill) && (
-                                    <a>Найти курсы</a>
+                                    <a href={'/courses/' + item.skill}>
+                                      Найти курсы
+                                    </a>
                                   )}
                                 </div>
                               </div>

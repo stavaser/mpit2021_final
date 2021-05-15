@@ -22,6 +22,7 @@ const Content = styled.div`
   width: 100%;
   padding: 0 5%;
   margin-top: 20px;
+  margin-bottom: 50px;
 `;
 const Title = styled.h3`
   margin-bottom: 0;
@@ -135,8 +136,8 @@ const About = (props) => {
                       <div></div>
                       <div>
                         <h2>{data.organization}</h2>
-                        <p>asasd</p>
-                        <p>asdasd</p>
+                        <p>{data.salary}</p>
+                        <p>{data.schedule}</p>
                         <Button block type="primary">
                           Редактировать
                         </Button>
@@ -186,13 +187,7 @@ const About = (props) => {
                   >
                     <Col span={24}>
                       <Box>
-                        <Title>Детали</Title>
-                        <Divider />
-                      </Box>
-                    </Col>
-                    <Col span={24}>
-                      <Box>
-                        <Title>Входяшие заявки</Title>
+                        <Title>Входящие заявки</Title>
                         <Divider />
                         <Table
                           dataSource={job_requests}
@@ -220,6 +215,33 @@ const About = (props) => {
                             render={() => <a>Позвонить</a>}
                           />
                         </Table>
+                      </Box>
+                    </Col>
+                    <Col span={24}>
+                      <Box>
+                        <Title>Детали</Title>
+                        <Divider />
+                        <h3>Обязанности:</h3>
+                        <ul>
+                          {data.job_info &&
+                            data.job_info.list_1.map((item) => {
+                              return <li>{item}</li>;
+                            })}
+                        </ul>
+                        <h3>Требования:</h3>
+                        <ul>
+                          {data.job_info &&
+                            data.job_info.list_2.map((item) => {
+                              return <li>{item}</li>;
+                            })}
+                        </ul>
+                        <h3>Условия:</h3>
+                        <ul>
+                          {data.job_info &&
+                            data.job_info.list_3.map((item) => {
+                              return <li>{item}</li>;
+                            })}
+                        </ul>
                       </Box>
                     </Col>
                   </Row>

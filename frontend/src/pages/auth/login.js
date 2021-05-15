@@ -50,12 +50,18 @@ const Login = (props) => {
         console.log(data);
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.name);
-        if (values.is_org) {
-          localStorage.setItem('isOrg', true);
-          history.push('/organization');
+        if (!data.error) {
+          if (values.is_org) {
+            localStorage.setItem('isOrg', true);
+            history.push('/organization');
+            window.location.reload(false);
+          } else {
+            localStorage.setItem('isOrg', false);
+            history.push('/main');
+            window.location.reload(false);
+          }
         } else {
-          localStorage.setItem('isOrg', false);
-          history.push('/main');
+          setError('Неправильный логин или пароль');
         }
       })
       .catch((e) => setError('Неправильный логин или пароль'));
@@ -136,7 +142,7 @@ const Login = (props) => {
               </Form>
               <Link
                 to={{
-                  pathname: `/Auth`,
+                  pathname: `/register`,
                 }}
               >
                 Зарегистрироваться

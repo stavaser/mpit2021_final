@@ -2,7 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -23,6 +23,7 @@ const StyledNavbar = styled.div`
   .profile {
     display: flex;
     justify-content: flex-end;
+    margin-right: 20px;
   }
   .search {
     display: flex;
@@ -30,36 +31,26 @@ const StyledNavbar = styled.div`
   }
 `;
 const Navbar = () => {
-  const suffix = (
-    <AudioOutlined
-      style={{
-        fontSize: 16,
-        color: '#1890ff',
-      }}
-    />
-  );
+  const history = useHistory();
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('isOrg');
+    history.push('/login');
+    window.location.reload(false);
   };
   const onSearch = (value) => console.log(value);
 
   return (
     <StyledNavbar>
-      <div className="search">
-        <Search
-          style={{ width: '250px' }}
-          placeholder="input search text"
-          onSearch={onSearch}
-          allowClear
-          size="large"
-          enterButton
-        />
-      </div>
       {localStorage.getItem('username') ? (
         <>
-          <div className="profile">{localStorage.getItem('username')}</div>
+          <div className="profile">
+            <Link to={{ pathname: '/profile' }}>
+              {localStorage.getItem('username')}
+            </Link>
+          </div>
           <Button onClick={() => logout()}>Выйти</Button>
         </>
       ) : (

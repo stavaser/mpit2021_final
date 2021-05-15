@@ -3,10 +3,10 @@
 ---------------------
 ## Docker
 
-По умолчанию Docker открывает порт `8000`. Изменить при необходимости
-Dockerfile.
 
 ```sh
+git clone https://github.com/stavaser/mpit2021_final
+cd mpit2021_final
 docker-compose -f docker-compose-dev.yml up --build
 ```
 
@@ -19,7 +19,7 @@ docker-compose -f docker-compose-dev.yml up --build
 
 ## Запуск фронта отдельно
 
-Установить зависимости и devDependencies и запустите сервер.
+Установите зависимости и запустите сервер.
 
 ```sh
 cd frontend

@@ -10,7 +10,7 @@ import {
 import {
   Row,
   Col,
-  Carousel,
+  Switch,
   Modal,
   Form,
   Input,
@@ -37,27 +37,43 @@ const Box = styled.div`
   border-radius: 20px;
   width: 100%;
   height: 100%;
-  align-content: center;
+  /* align-content: center; */
   flex-direction: row;
-  align-items: center;
+  /* align-items: center; */
   flex-wrap: wrap;
-  justify-content: space-between;
-  text-align: center;
+  /* justify-content: space-between; */
+  /* text-align: center; */
 `;
 const Register = (props) => {
   const history = useHistory();
   const [finished, setFinished] = useState(false);
+  const [isOrg, setIsOrg] = useState(false);
   const [points, setPoints] = useState(0);
   const onFinish = (values) => {
     console.log(values);
-    requests.accounts
-      .register(values)
-      .then(({ data }) => {
-        console.log(data);
-        history.push('/login');
-      })
-
-      .catch((e) => console.log(e));
+    if (isOrg) {
+      requests.organization
+        .org_register(values)
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem('token', data.data.token);
+          localStorage.setItem('username', data.data.name);
+          console.log(data.data.name);
+          history.push('/main');
+        })
+        .catch((e) => console.log(e));
+    } else {
+      requests.accounts
+        .user_register(values)
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem('token', data.data.token);
+          localStorage.setItem('username', data.data.name);
+          console.log(data.data.name);
+          history.push('/organization');
+        })
+        .catch((e) => console.log(e));
+    }
   };
 
   return (
@@ -94,6 +110,79 @@ const Register = (props) => {
                 >
                   <Input placeholder="Логин" />
                 </Form.Item>
+                {isOrg ? (
+                  <>
+                    <Form.Item
+                      label="Название организации"
+                      name="title"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Это поле обязательно',
+                        },
+                      ]}
+                      tooltip="Без пробелов"
+                    >
+                      <Input placeholder="Название организации" />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Почта"
+                      name="email"
+                      rules={[
+                        {
+                          type: 'email',
+                          required: true,
+                          message: 'Это поле обязательно',
+                        },
+                      ]}
+                      tooltip="Это поле обязательно"
+                    >
+                      <Input placeholder="почта" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Адрес"
+                      name="address"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Это поле обязательно',
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Адрес" />
+                    </Form.Item>
+                  </>
+                ) : (
+                  <>
+                    <Form.Item
+                      label="Имя"
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Это поле обязательно',
+                        },
+                      ]}
+                      tooltip="Без пробелов"
+                    >
+                      <Input placeholder="Имя" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Фамилия"
+                      name="last_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Это поле обязательно',
+                        },
+                      ]}
+                      tooltip="Без пробелов"
+                    >
+                      <Input placeholder="Фамилия" />
+                    </Form.Item>
+                  </>
+                )}
                 <Form.Item
                   label="Пароль"
                   name="password"
@@ -108,6 +197,22 @@ const Register = (props) => {
                   <Input.Password placeholder="ссылка" />
                 </Form.Item>
 
+                <Form.Item
+                  label="Организация"
+                  name="is_org"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Это поле обязательно',
+                    },
+                  ]}
+                  tooltip="Это поле обязательно"
+                >
+                  <Radio.Group onChange={() => setIsOrg(!isOrg)}>
+                    <Radio.Button value={true}>Да</Radio.Button>
+                    <Radio.Button value={false}>Нет</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Отправить

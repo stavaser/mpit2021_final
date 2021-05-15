@@ -10,8 +10,4 @@ class UserProfile(models.Model):
     )
     name = models.TextField()
     last_name = models.TextField(null=True, blank=True)
-    middle_name = models.TextField(null=True, blank=True)
     points = models.IntegerField(default=0)
-
-    class Meta:
-        app_label = "users"

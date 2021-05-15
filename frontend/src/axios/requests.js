@@ -4,23 +4,40 @@ import axios from 'axios';
 const apiClient = axios.create({
   baseURL: 'http:///localhost:8000/api/',
   headers: {
-    Authorization: 'Token ' + window.localStorage.getItem('token'),
+    Authorization: window.localStorage.getItem('token'),
     // 'Content-Type': 'application/json',
   },
 });
 export default {
   accounts: {
     login(request) {
-      return apiClient.post(`accounts/token/login/`, request);
+      return apiClient.post(`request/user_login`, request);
     },
     logout(request) {
       return apiClient.get(`accounts/token/logout/`, request);
     },
-    register(request) {
-      return apiClient.post(`accounts/users/`, request);
+    user_register(request) {
+      return apiClient.post(`request/user_register`, request);
     },
     get_user(request) {
       return apiClient.get(`accounts/users/me/`, request);
+    },
+  },
+  organization: {
+    org_register(request) {
+      return apiClient.post(`request/org_register`, request);
+    },
+
+    post_vacancy(request) {
+      return apiClient.post(`request/post_vacancies`, request);
+    },
+    get_org_vacancies(request) {
+      return apiClient.post(`request/get_org_vacancies`, request);
+    },
+  },
+  materials: {
+    get_vacancies(request) {
+      return apiClient.post(`request/get_vacancies`, request);
     },
   },
 };

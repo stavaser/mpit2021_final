@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'apps.accounts',
+    'apps.organizations',
+    'apps.materials',
     'api',
 ]
 
@@ -56,19 +58,19 @@ MIDDLEWARE = [
 ]
 
 #configure DRF
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.TokenAuthentication',
+#     ),
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }
 
 # configure Djoser
-DJOSER = {
-    "USER_ID_FIELD": "username"
-}
+# DJOSER = {
+#     "USER_ID_FIELD": "username"
+# }
 
 ROOT_URLCONF = 'server.urls'
 

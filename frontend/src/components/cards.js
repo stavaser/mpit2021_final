@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Col, Badge, Divider } from 'antd';
+import { Col, Button, Divider } from 'antd';
 
 import {
   CalendarOutlined,
@@ -82,46 +82,41 @@ const Card = styled.div`
 `;
 
 const Cards = (params) => {
-  const { id, skill, title, org } = params;
+  const { id, reqs, title, org, desc } = params;
 
   return (
     <React.Fragment>
       <Col xs={24} sm={24} md={12} lg={8} xxl={6} xxxl={6}>
-        <StyledRibbon>
-          <Badge.Ribbon text={skill} color="#BB7CF5">
-            <Card>
-              <Image src="" />
+        <Card>
+          <Image src="" />
 
-              <TextBox>
-                <MainInfo>
-                  <Title href="course-preview">
-                    <Link
-                      to={{
-                        pathname: `/student/catalog/course-preview/${id}/${title}`,
-                      }}
-                    >
-                      {title}
-                    </Link>
-                  </Title>
-                  <Subtitle>{org}</Subtitle>
-                  <Divider />
-                </MainInfo>
+          <TextBox>
+            <MainInfo>
+              <Title href="course-preview">
+                <Link
+                  to={{
+                    pathname: `/student/catalog/course-preview/${id}/${title}`,
+                  }}
+                >
+                  {title}
+                </Link>
+              </Title>
+              <Subtitle>{org}</Subtitle>
+            </MainInfo>
 
-                <Stats>
-                  <Text></Text>
-                  <Text>
-                    <CalendarOutlined />
-                    <span>asd</span>
-                  </Text>
-                  <Text>
-                    <UsergroupAddOutlined />
-                    <span>ads</span>
-                  </Text>
-                </Stats>
-              </TextBox>
-            </Card>
-          </Badge.Ribbon>
-        </StyledRibbon>
+            <Stats>
+              {reqs.map((item) => {
+                return (
+                  <Button style={{ marginRight: '10px' }} type="dashed">
+                    {item.skill}
+                  </Button>
+                );
+              })}
+              <Divider />
+              {desc}
+            </Stats>
+          </TextBox>
+        </Card>
       </Col>
     </React.Fragment>
   );

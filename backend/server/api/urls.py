@@ -12,6 +12,7 @@ urlpatterns = [
    
     path("request/user_login", views.user_login, name="user_login"),
     path("request/user_register", views.user_register, name="user_register"),
+    path("request/get_user_profile", views.get_user_profile, name="get_user_profile"),
     path("request/org_register", views.org_register, name="org_register"),
     path("request/get_tests", views.get_tests, name="get_tests"),
     path("request/get_vacancies", views.get_vacancies, name="get_vacancies"),

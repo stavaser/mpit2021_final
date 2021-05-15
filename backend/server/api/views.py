@@ -52,7 +52,7 @@ def user_register(request):
    
     profile = UserProfile()
     profile.user = user
-    profile.name = user_data['username']
+    profile.name = user_data['name']
     profile.last_name = user_data['last_name']
 
     user.save()
@@ -64,6 +64,22 @@ def user_register(request):
     result["name"] = profile.name
     result["token"] = token.key
     return Response(result, content_type="application/json")
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def get_user_profile(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        profile = UserProfile.objects.get(user=user)
+        result['name'] = profile.name
+        result['last_name'] = profile.last_name
+        return Response(result)
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

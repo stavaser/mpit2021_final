@@ -65,20 +65,19 @@ const Profile = (props) => {
       pdfExportComponent.current.save();
     }
   };
-  const ref = React.createRef();
   const vacancy_id = props.match.params.vacancy_id;
   const [data, setData] = useState([]);
   const [courses, setCourses] = useState([]);
   const [tags, setTags] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(true);
   useEffect(() => {
-    requests.materials
-      .get_vacancy_id({ vacancy_id })
-      .then(({ data }) => {
-        console.log(data);
-        setData(data);
-      })
-      .catch((e) => console.log(e));
+    // requests.materials
+    //   .get_vacancy_id({ vacancy_id })
+    //   .then(({ data }) => {
+    //     console.log(data);
+    //     setData(data);
+    //   })
+    //   .catch((e) => console.log(e));
 
     requests.materials
       .get_finished_courses({})
@@ -87,32 +86,16 @@ const Profile = (props) => {
         setCourses(data.result);
       })
       .catch((e) => console.log(e));
+
+    requests.accounts
+      .get_user_profile({})
+      .then(({ data }) => {
+        console.log(data);
+        setProfile(data);
+      })
+      .catch((e) => console.log(e));
   }, []);
   console.log(data);
-  const getTagName = (id) => {
-    {
-      return tags.filter((x) => x.id === id).map((x) => x.name);
-    }
-  };
-
-  const confirm_delete = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-  };
-  const confirm_add = (phone, quest_id) => {
-    console.log('quest_id', quest_id);
-    console.log('phone', phone);
-
-    requests.quests
-      .edit_member({ quest_id, phone, action: 'add' })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          window.location.reload(false);
-        }
-      })
-      .catch((e) => console.log(e.message));
-  };
 
   return (
     <>
@@ -147,9 +130,9 @@ const Profile = (props) => {
                         <img src={pfp} style={{ width: '100%' }} />
                       </div>
                       <div>
-                        <h2>{data.organization}</h2>
-                        <p>asasd</p>
-                        <p>asdasd</p>
+                        <h2>
+                          {profile.name} {profile.last_name}
+                        </h2>
                         <Button block type="primary">
                           Редактировать
                         </Button>
@@ -229,33 +212,6 @@ const Profile = (props) => {
                             dataIndex="title"
                             key="title"
                           />
-                          <Column
-                            title="Действие"
-                            key="action"
-                            dataIndex="phone"
-                            render={(phone, item) => (
-                              <Space size="middle">
-                                <Popconfirm
-                                  title={`Вы действительно хотите принять эту заявку?`}
-                                  onConfirm={() =>
-                                    confirm_add(phone, item.quest_id)
-                                  }
-                                  okText="Да"
-                                  cancelText="Нет"
-                                >
-                                  <a> Принять</a>
-                                </Popconfirm>
-                                <Popconfirm
-                                  title={`Вы действительно хотите отклонить эту заявку?`}
-                                  onConfirm={() => confirm_delete(phone)}
-                                  okText="Да"
-                                  cancelText="Нет"
-                                >
-                                  <a>Отклонить</a>
-                                </Popconfirm>
-                              </Space>
-                            )}
-                          />
                         </Table>
                       </Box>
                     </Col>
@@ -263,9 +219,9 @@ const Profile = (props) => {
                       <Box>
                         <Title>Пройденные курсы</Title>
                         <Divider />
-                        <Collapse>
-                          {courses &&
-                            courses.map((item, index) => {
+                        {courses.length > 0 ? (
+                          <Collapse>
+                            {courses.map((item, index) => {
                               return (
                                 <Panel
                                   header={
@@ -279,7 +235,13 @@ const Profile = (props) => {
                                 </Panel>
                               );
                             })}
-                        </Collapse>
+                          </Collapse>
+                        ) : (
+                          <div>
+                            Вы еще не прошли ни одного курса.{' '}
+                            <a href="/courses"> Пройдите сейчас</a>
+                          </div>
+                        )}
                       </Box>
                     </Col>
                   </Row>

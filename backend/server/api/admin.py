@@ -2,7 +2,10 @@ from django.contrib import admin
 
 from apps.materials.models import *
 from apps.organizations.models import Organization
+from apps.accounts.models import UserProfile
 
+
+admin.site.register(UserProfile)
 
 admin.site.register(Organization)
 admin.site.register(Vacancies)

@@ -22,6 +22,9 @@ export default {
     get_user(request) {
       return apiClient.get(`accounts/users/me/`, request);
     },
+    get_user_profile(request) {
+      return apiClient.post(`request/get_user_profile`, request);
+    },
   },
   organization: {
     org_register(request) {

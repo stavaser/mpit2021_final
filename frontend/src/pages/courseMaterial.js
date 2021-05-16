@@ -133,10 +133,9 @@ const CourseMaterial = (props) => {
     requests.materials
       .post_finished({ course_id })
       .catch((e) => console.log(e));
-  };
-
-  const answer = () => {
-    setAnswered(true);
+    requests.materials
+      .post_user_skill({ course_id })
+      .catch((e) => console.log(e));
   };
 
   const results = (
@@ -144,11 +143,20 @@ const CourseMaterial = (props) => {
       <Result
         icon={<SmileOutlined />}
         title="Вы прошли этот курс!"
-        extra={
+        extra={[
           <Button onClick={() => history.push('/courses')}>
             Вернуться на главную
-          </Button>
-        }
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/test');
+              window.location.reload(false);
+            }}
+          >
+            Пройти тест
+          </Button>,
+        ]}
       />
     </>
   );

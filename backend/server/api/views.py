@@ -310,6 +310,25 @@ def post_vacancies(request):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@csrf_exempt
+def post_user_skill(request):
+    result = {}
+    errors = []
+    if request.method == 'POST' and request.body:
+        user_data = json.loads(request.body)
+        token = Token.objects.get(key=request.headers['Authorization'])
+        user = token.user
+        course = Courses.objects.get(pk=user_data['course_id'])
+        skills = CourseSkills.objects.filter(course=course)
+        for item in skills:
+            user_skill = UserSkills()
+            user_skill.user = user
+            user_skill.skill = item.skill
+            user_skill.save()
+        return Response(status=status.HTTP_200_OK)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @csrf_exempt

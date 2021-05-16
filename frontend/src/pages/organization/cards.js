@@ -76,7 +76,6 @@ const Card = styled.div`
   position: relative;
   box-shadow: 0px 10px 57px rgba(0, 0, 0, 0.1);
   border-radius: 27px;
-  color: #b4b9ca;
   height: 300px;
   width: 350px;
   overflow: hidden;
@@ -89,7 +88,7 @@ const Card = styled.div`
 `;
 
 const Cards = (params) => {
-  const { id, reqs, title, org, desc } = params;
+  const { id, reqs, title, org, desc, salary, address, schedule } = params;
 
   return (
     <React.Fragment>
@@ -97,25 +96,35 @@ const Cards = (params) => {
         <Card>
           <h3>{org}</h3>
 
-          <p>Якутск, Россия</p>
           <Divider style={{ margin: 0, marginTop: '10px' }} />
-          <Link to={{ pathname: '/organization/about/' + id }}>
-            <h2>{title}</h2>
-          </Link>
-          <p>от 150 000 р.</p>
-          <p>Пн-Пт. 8:00-16:00</p>
 
-          {reqs &&
-            reqs.map((item) => {
-              return (
-                <Tooltip title="Найти курсы">
-                  <Button size="small" style={{ marginRight: '10px' }}>
-                    {item.skill}
-                  </Button>
-                </Tooltip>
-              );
-            })}
-          <Divider />
+          <div style={{ backgroundColor: '#D1E9FF', padding: '10px' }}>
+            <p>{address}</p>
+
+            <Link to={{ pathname: '/organization/about/' + id }}>
+              <h2>{title}</h2>
+            </Link>
+            <p>Зарплата: {salary}</p>
+            <p>График: {schedule}</p>
+          </div>
+          <div style={{ margin: '20px 0' }}>
+            {reqs &&
+              reqs.map((item) => {
+                return (
+                  <Tooltip title="Найти курсы">
+                    <Button
+                      type="primary"
+                      size="small"
+                      ghost
+                      style={{ marginRight: '10px' }}
+                    >
+                      {item.skill}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+          </div>
+
           <Button type="primary" block>
             <Link to={{ pathname: '/organization/about/' + id }}>
               Посмотреть

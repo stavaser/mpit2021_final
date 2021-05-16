@@ -52,6 +52,9 @@ const Main = () => {
                     title={item.title}
                     desc={item.description}
                     org={item.organization}
+                    salary={item.salary}
+                    schedule={item.schedule}
+                    address={item.address}
                     reqs={item.reqs}
                     job_info={item.job_info}
                   />

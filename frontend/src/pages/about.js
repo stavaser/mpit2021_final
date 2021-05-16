@@ -4,6 +4,7 @@ import Navbar from '../components/navbar';
 import Sidebar from '../components/sidebar';
 import Cards from '../components/cards';
 import requests from '../axios/requests';
+import smallLOGO from '../images/smallLOGO.png';
 
 import { CheckCircleFilled } from '@ant-design/icons';
 import {
@@ -181,11 +182,13 @@ const About = (props) => {
                 <Col span={24}>
                   <Sider>
                     <div className="flex">
-                      <div></div>
+                      <div>
+                        <img src={smallLOGO} style={{ width: '100%' }} />
+                      </div>
                       <div>
                         <h2>{data.organization}</h2>
-                        <p>{data.salary}</p>
-                        <p>{data.schedule}</p>
+                        <p>Зарптата: {data.salary}</p>
+                        <p>График: {data.schedule}</p>
                         <Button
                           block
                           type="primary"

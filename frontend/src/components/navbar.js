@@ -46,6 +46,7 @@ const Navbar = () => {
     <StyledNavbar>
       {localStorage.getItem('username') ? (
         <>
+          <div></div>
           <div className="profile">
             <Link to={{ pathname: '/profile' }}>
               {localStorage.getItem('username')}

@@ -25,7 +25,7 @@ SECRET_KEY = 'nv(^e^#u2#h(%tq6xn@!jxtgngo_)ut(__d(x4jhw+l-+&8wz@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -76,7 +76,9 @@ ROOT_URLCONF = 'server.urls'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
 ]
 
 

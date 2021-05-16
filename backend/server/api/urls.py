@@ -31,4 +31,5 @@ urlpatterns = [
     path("request/get_matching_skills", views.get_matching_skills, name="get_matching_skills"),
     path("request/get_vacancy_requests", views.get_vacancy_requests, name="get_vacancy_requests"),
     path("request/post_vacancy_request", views.post_vacancy_request, name="post_vacancy_request"),
+    path("request/post_user_skill", views.post_user_skill, name="post_user_skill"),
 ]

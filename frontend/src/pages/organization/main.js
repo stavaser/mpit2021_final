@@ -644,6 +644,9 @@ const Main = () => {
                     desc={item.description}
                     org={item.organization}
                     reqs={item.reqs}
+                    salary={item.salary}
+                    schedule={item.schedule}
+                    address={item.address}
                   />
                 );
               })}
